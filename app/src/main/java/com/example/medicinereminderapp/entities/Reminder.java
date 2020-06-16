@@ -1,16 +1,16 @@
-package com.example.medicinereminderapp;
+package com.example.medicinereminderapp.entities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "reminders")
-public class ReminderList {
-    public ReminderList() {}
+public class Reminder {
+    public Reminder() {}
 
     @PrimaryKey(autoGenerate = true)
-    public int reminderListId;
+    public int reminderId;
 
-    public int medicineListId;
+    public int medicineId;
 
     public String timeOfDay;
 
