@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MedicineReminderApp</string>
+    <string name="add_list_item">Add</string>
 </resources>
