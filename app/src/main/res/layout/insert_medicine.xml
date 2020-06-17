@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:useDefaultMargins="true"
+    android:alignmentMode="alignBounds"
+    android:columnOrderPreserved="false"
+    android:columnCount="4">
+
+    <EditText
+        android:id="@+id/editTextNameMedicine"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/name_medicine" />
+
+    <EditText
+        android:id="@+id/editTextDateBegin"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_row="2"
+        android:layout_column="0"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="@string/date_begin_medicine"/>
+
+    <EditText
+        android:id="@+id/editTextDateEnd"
+        android:layout_width="318dp"
+        android:layout_height="wrap_content"
+        android:layout_row="4"
+        android:layout_column="0"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="@string/date_end_medicine"/>
+
+    <TextView
+        android:id="@+id/textViewDateBegin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:text="@string/date_begin_medicine" />
+
+    <TextView
+        android:id="@+id/textViewDateEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:text="@string/date_end_medicine" />
+
+    <Button
+        android:id="@+id/addMedicineButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="5"
+        android:layout_column="0"
+        android:onClick="addMedicine"
+        android:text="@string/add_list_item" />
+
+</GridLayout>

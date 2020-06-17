@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MedicineReminderApp</string>
+    <string name="app_name">Medicine Reminder</string>
     <string name="add_list_item">Voeg toe</string>
+    <string name="name_medicine">Naam medicijn</string>
+    <string name="date_begin_medicine">Startdatum medicatie</string>
+    <string name="date_end_medicine">Einddatum medicatie</string>
+    <string name="add_medicine">Medicatie toevoegen</string>
 </resources>

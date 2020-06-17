@@ -5,6 +5,7 @@ import android.app.Application;
 import com.example.medicinereminderapp.daos.MedicineDao;
 import com.example.medicinereminderapp.daos.ReminderDao;
 import com.example.medicinereminderapp.entities.Medicine;
+import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 import com.example.medicinereminderapp.entities.Reminder;
 
 import java.util.List;
@@ -20,11 +21,11 @@ public class AppRepository {
     }
 
     //Medicines
-    public List<Medicine> getAllMedicines() {
+    public List<MedicineWithRemindersList> getAllMedicines() {
         return mMedicineDao.getAllMedicines();
     }
 
-    public Medicine getMedicineById(int id) {
+    public MedicineWithRemindersList getMedicineById(int id) {
         return mMedicineDao.getMedicineById(id);
     }
 

@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">MedicineReminderApp</string>
+    <string name="app_name">Medicine Reminder</string>
     <string name="add_list_item">Add</string>
+    <string name="name_medicine">Name medicine</string>
+    <string name="date_begin_medicine">Start date medication</string>
+    <string name="date_end_medicine">End date medication</string>
+    <string name="add_medicine">Add Medication</string>
 </resources>

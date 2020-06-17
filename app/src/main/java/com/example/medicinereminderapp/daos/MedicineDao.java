@@ -7,17 +7,17 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.medicinereminderapp.entities.Medicine;
-import com.example.medicinereminderapp.entities.Reminder;
+import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 
 import java.util.List;
 
 @Dao
 public interface MedicineDao {
     @Query("SELECT * FROM medicines")
-    List<Medicine> getAllMedicines();
+    List<MedicineWithRemindersList> getAllMedicines();
 
     @Query("SELECT * FROM medicines WHERE medicineId LIKE :id")
-    Medicine getMedicineById(int id);
+    MedicineWithRemindersList getMedicineById(int id);
 
     @Insert
     void insertMedicine(Medicine medicine);
