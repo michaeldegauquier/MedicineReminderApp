@@ -46,3 +46,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
         finish();
     }
 }
+
+// Stackoverflow. How do I pass data between Activities in Android application? Geraadpleegd via
+// https://stackoverflow.com/questions/2091465/how-do-i-pass-data-between-activities-in-android-application
+// Geraadpleegd op 17 juni 2020

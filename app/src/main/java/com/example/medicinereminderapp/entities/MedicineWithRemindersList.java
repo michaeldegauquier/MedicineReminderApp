@@ -15,3 +15,7 @@ public class MedicineWithRemindersList {
     )
     public List<Reminder> reminders;
 }
+
+// Developers android. Define relationships between objects. Geraadpleegd via
+// https://developer.android.com/training/data-storage/room/relationships
+// Geraadpleegd op 16 juni 2020

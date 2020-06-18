@@ -28,3 +28,7 @@ public interface MedicineDao {
     @Delete
     void deleteMedicine(Medicine medicine);
 }
+
+// Developers android. Save data in a local database using Room. Geraadpleegd via
+// https://developer.android.com/training/data-storage/room
+// Geraadpleegd op 16 juni 2020
