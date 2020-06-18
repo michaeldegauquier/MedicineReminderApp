@@ -37,8 +37,8 @@ public class AppRepository {
         mMedicineDao.updateMedicine(medicine);
     }
 
-    public void deleteMedicine(Medicine medicine) {
-        mMedicineDao.deleteMedicine(medicine);
+    public void deleteMedicineById(int id) {
+        mMedicineDao.deleteMedicineById(id);
     }
 
     //Reminders

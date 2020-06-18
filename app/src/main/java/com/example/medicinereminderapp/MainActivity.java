@@ -12,6 +12,7 @@ import android.view.View;
 import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.Medicine;
+import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 
 import static com.example.medicinereminderapp.InsertMedicineActivity.EXTRA_MEDICINE_OBJ;
 
@@ -29,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
         this.updateMedicineList();
     }
 
-    private void updateMedicineList() {
+    public void updateMedicineList() {
         // Get a handle to the RecyclerView.
         mRecyclerView = findViewById(R.id.recyclerview);
         // Create an adapter and supply the data to be displayed.
-        mAdapter = new MedicineListAdapter(this, mRepository.getAllMedicines());
+        mAdapter = new MedicineListAdapter(this, mRepository.getAllMedicines(), mRepository);
         // Connect the adapter with the RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // Give the RecyclerView a default layout manager.
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // check that it is the SecondActivity with an OK result
+        // check that it is the InsertMedicineActivity with an OK result
         if (requestCode == INSERT_MEDICINE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 

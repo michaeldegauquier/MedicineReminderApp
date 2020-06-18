@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="6dp">
+    android:useDefaultMargins="true"
+    android:alignmentMode="alignBounds"
+    android:columnOrderPreserved="false"
+    android:columnCount="4"
+    android:id="@+id/medicine_item"
+    style="@style/list_item_style">
 
-    <TextView
-        android:id="@+id/medicine_item"
+    <LinearLayout
         style="@style/list_item_style"
-        android:layout_height="64dp" />
+        android:layout_width="351dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/medicine_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/medicine_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:background="#EF0A0A"
+        android:src="@drawable/ic_delete"
+        tools:ignore="ContentDescription" />
+
+</GridLayout>

@@ -25,8 +25,8 @@ public interface MedicineDao {
     @Update
     void updateMedicine(Medicine medicine);
 
-    @Delete
-    void deleteMedicine(Medicine medicine);
+    @Query("DELETE FROM medicines WHERE medicineId LIKE :id")
+    void deleteMedicineById(int id);
 }
 
 // Developers android. Save data in a local database using Room. Geraadpleegd via
