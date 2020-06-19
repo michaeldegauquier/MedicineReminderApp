@@ -2,17 +2,10 @@ package com.example.medicinereminderapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.medicinereminderapp.entities.Medicine;
 
 public class InsertMedicineActivity extends AppCompatActivity {
     public final static String EXTRA_MEDICINE_OBJ = "com.example.medicinereminderapp.MEDICINE_OBJ";
@@ -20,7 +13,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.insert_medicine);
+        setContentView(R.layout.activity_insert_medicine);
     }
 
     public void addMedicine(View view) {

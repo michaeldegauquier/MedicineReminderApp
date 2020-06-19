@@ -13,7 +13,7 @@
 
     <LinearLayout
         style="@style/list_item_style"
-        android:layout_width="351dp"
+        android:layout_width="289dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="6dp">
@@ -38,6 +38,16 @@
         android:layout_column="3"
         android:background="#EF0A0A"
         android:src="@drawable/ic_delete"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/accessAlarmsButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:background="#3F51B5"
+        android:src="@drawable/ic_access_alarms"
         tools:ignore="ContentDescription" />
 
 </GridLayout>

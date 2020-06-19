@@ -1,7 +1,6 @@
 package com.example.medicinereminderapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medicinereminderapp.MainActivity;
 import com.example.medicinereminderapp.R;
 import com.example.medicinereminderapp.database.AppRepository;
-import com.example.medicinereminderapp.entities.Medicine;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 
 import java.util.List;
@@ -59,6 +57,19 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             }
         });
 
+        holder.accessAlarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MedicineWithRemindersList medicine = myMedicines.get(position);
+
+                Log.i("CLICKED CLOCK", medicine.medicines.name);
+
+                //Intent intent = new Intent(context, someClass.class);
+                //intent.putExtra("MEDICINE_ID",medicine.medicines.medicineId);
+                //context.startActivity(intent);
+            }
+        });
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +96,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         public final TextView medicineName;
         public final TextView medicineDate;
         public final ImageButton deleteButton;
+        public final ImageButton accessAlarmButton;
         public final GridLayout medicineItem;
 
         final MedicineListAdapter mAdapter;
@@ -95,6 +107,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             medicineName = view.findViewById(R.id.medicine_name);
             medicineDate = view.findViewById(R.id.medicine_date);
             deleteButton = view.findViewById(R.id.deleteButton);
+            accessAlarmButton = view.findViewById(R.id.accessAlarmsButton);
             medicineItem = view.findViewById(R.id.medicine_item);
             this.mAdapter = adapter;
             /*
