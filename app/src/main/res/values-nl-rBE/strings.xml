@@ -5,5 +5,8 @@
     <string name="name_medicine">Naam medicijn</string>
     <string name="date_begin_medicine">Startdatum medicatie</string>
     <string name="date_end_medicine">Einddatum medicatie</string>
-    <string name="add_medicine">Medicatie toevoegen</string>
+    <string name="add_medicine">Medicijn toevoegen</string>
+    <string name="add_reminder">Herinering toevoegen</string>
+    <string name="time_of_day">Uur</string>
+    <string name="amount">Aantal medicijnen</string>
 </resources>

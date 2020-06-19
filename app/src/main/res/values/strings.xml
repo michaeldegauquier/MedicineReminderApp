@@ -4,5 +4,8 @@
     <string name="name_medicine">Name medicine</string>
     <string name="date_begin_medicine">Start date medication</string>
     <string name="date_end_medicine">End date medication</string>
-    <string name="add_medicine">Add Medication</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="time_of_day">Time of day</string>
+    <string name="amount">Amount of medicines</string>
 </resources>

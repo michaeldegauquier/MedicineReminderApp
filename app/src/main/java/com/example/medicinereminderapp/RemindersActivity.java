@@ -1,4 +1,7 @@
 package com.example.medicinereminderapp;
 
-public class RemindersActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class RemindersActivity extends AppCompatActivity {
+
 }
