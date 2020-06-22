@@ -1,6 +1,7 @@
 package com.example.medicinereminderapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicinereminderapp.MainActivity;
 import com.example.medicinereminderapp.R;
+import com.example.medicinereminderapp.RemindersActivity;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 
@@ -62,11 +64,11 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             public void onClick(View v) {
                 MedicineWithRemindersList medicine = myMedicines.get(position);
 
-                Log.i("CLICKED CLOCK", medicine.medicines.name);
+                Log.i("CLICKED CLOCK", medicine.medicines.medicineId + "");
 
-                //Intent intent = new Intent(context, someClass.class);
-                //intent.putExtra("MEDICINE_ID",medicine.medicines.medicineId);
-                //context.startActivity(intent);
+                Intent intent = new Intent(context, RemindersActivity.class);
+                intent.putExtra("MEDICINE_ID", medicine.medicines.medicineId);
+                context.startActivity(intent);
             }
         });
 

@@ -21,20 +21,20 @@ import java.util.List;
 public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapter.ReminderViewHolder> {
     private Context context;
     private LayoutInflater mInflater;
-    private AppRepository repository;
+    private AppRepository mRepository;
     private final List<Reminder> myReminders;
 
     public ReminderListAdapter(Context context, List<Reminder> myReminders, AppRepository repository) {
-        mInflater = LayoutInflater.from(context);
+        this.mInflater = LayoutInflater.from(context);
         this.myReminders = myReminders;
         this.context = context;
-        this.repository = repository;
+        this.mRepository = repository;
     }
 
     @NonNull
     @Override
     public ReminderListAdapter.ReminderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.medicine_list_item,
+        View mItemView = mInflater.inflate(R.layout.reminder_list_item,
                 parent, false);
         return new ReminderViewHolder(mItemView, this);
     }
@@ -43,7 +43,8 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
         Reminder mCurrent = myReminders.get(position);
         holder.reminderTimeOfDay.setText(mCurrent.timeOfDay);
-        holder.reminderAmountMedicines.setText(mCurrent.amount);
+        String amount = mCurrent.amount + "";
+        holder.reminderAmountMedicines.setText(amount);
 
         holder.reminderItem.setOnClickListener(new View.OnClickListener() {
             @Override
