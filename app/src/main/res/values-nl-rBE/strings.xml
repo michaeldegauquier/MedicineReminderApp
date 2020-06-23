@@ -9,4 +9,5 @@
     <string name="add_reminder">Herinering toevoegen</string>
     <string name="time_of_day">Uur</string>
     <string name="amount">Aantal medicijnen</string>
+    <string name="medicines">medicijnen</string>
 </resources>

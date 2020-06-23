@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicinereminderapp.R;
+import com.example.medicinereminderapp.RemindersActivity;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.Reminder;
 
@@ -61,9 +62,9 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
                 Reminder reminder = myReminders.get(position);
                 Log.i("CLICKED DELETE", reminder.timeOfDay);
 
-                //repository.deleteReminder(reminder);
-                //notifyItemRemoved(position);
-                //((DisplayRemindersFragment)context).updateMedicineList();
+                mRepository.deleteReminder(reminder);
+                notifyItemRemoved(position);
+                ((RemindersActivity)context).updateView();
             }
         });
     }

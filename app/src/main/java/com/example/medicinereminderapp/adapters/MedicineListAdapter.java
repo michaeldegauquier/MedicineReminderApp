@@ -18,8 +18,15 @@ import com.example.medicinereminderapp.R;
 import com.example.medicinereminderapp.RemindersActivity;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
+import com.example.medicinereminderapp.entities.Reminder;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapter.MedicineViewHolder> {
     private Context context;
@@ -44,11 +51,21 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
-        MedicineWithRemindersList mCurrent = myMedicines.get(position);
-        holder.medicineName.setText(mCurrent.medicines.name);
 
-        String medDate = mCurrent.medicines.dateBegin + " - " + mCurrent.medicines.dateEnd;
-        holder.medicineDate.setText(medDate);
+
+        try {
+            MedicineWithRemindersList mCurrent = myMedicines.get(position);
+            int totalAmount = getTotalAmountMedicines(mCurrent.medicines.medicineId, repository);
+            String medName = mCurrent.medicines.name + " - " + totalAmount;
+            holder.medicineName.setText(medName);
+
+            String medDate = mCurrent.medicines.dateBegin + " - " + mCurrent.medicines.dateEnd;
+            holder.medicineDate.setText(medDate);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         holder.medicineItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +110,43 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         return 0;
     }
 
+    private int getTotalAmountMedicines(int medicineId, AppRepository repository) throws ParseException {
+        MedicineWithRemindersList med = repository.getMedicineById(medicineId);
+        if (med.reminders.size() <= 0) {
+            return 0;
+        }
+        else {
+            int days = getDaysBetweenDates(med.medicines.dateBegin, med.medicines.dateEnd);
+            int amountMed = 0;
+            for (int i = 0; i < med.reminders.size(); i++) {
+                amountMed += days * med.reminders.get(i).amount;
+            }
+            return amountMed;
+        }
+    }
+
+    private int getDaysBetweenDates(String dBegin, String dEnd) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String today = formatter.format(new Date());
+
+        Date dateBegin = formatter.parse(dBegin);
+        Date dateEnd = formatter.parse(dEnd);
+        Date dateToday = formatter.parse(today);
+
+        long diff = 0;
+        if (dateToday.after(dateBegin)) {
+            Log.i("date1", "Today after begin");
+            diff = Math.abs(dateToday.getTime() - dateEnd.getTime());
+        }
+        else {
+            Log.i("date2", "Today not after begin");
+            diff = Math.abs(dateBegin.getTime() - dateEnd.getTime());
+        }
+
+        long diffDates = diff / (24 * 60 * 60 * 1000);
+        return (int) diffDates;
+    }
+
     class MedicineViewHolder extends RecyclerView.ViewHolder {
         public final View view;
         public final TextView medicineName;
@@ -112,18 +166,6 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             accessAlarmButton = view.findViewById(R.id.accessAlarmsButton);
             medicineItem = view.findViewById(R.id.medicine_item);
             this.mAdapter = adapter;
-            /*
-            @Override
-            public void onClick(View v) {
-                int position = getLayoutPosition();
-                MedicineWithRemindersList list = myMedicines.get(position);
-
-                Log.d("DevLog_ListAdapter","clicked list with id: " + list.medicines.medicineId);
-
-                Intent intent = new Intent(context, someClass.class);
-                intent.putExtra("com.example.medicinereminderapp.MEDICINE_ID",list.medicines.medicineId);
-                context.startActivity(intent);
-            }*/
         }
     }
 }
@@ -135,3 +177,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 // Android-code blogspot. Android RecyclerView add remove item example. Geraadpleegd via
 // https://android--code.blogspot.com/2015/12/android-recyclerview-add-remove-item.html
 // Geraadpleegd op 18 juni 2020
+
+// Stackoverflow. Calculating days between two dates with Java. Geraadpleegd via
+// https://stackoverflow.com/questions/20165564/calculating-days-between-two-dates-with-java
+// Geraadpleegd op 23 juni 2020

@@ -31,8 +31,10 @@
         android:layout_row="3"
         android:layout_column="0"
         android:ems="10"
+        android:onClick="onClickDateBegin"
         android:hint="@string/date_begin_medicine"
-        android:inputType="date" />
+        android:inputType="date"
+        android:focusable="false" />
 
     <EditText
         android:id="@+id/editTextDateEnd"
@@ -41,8 +43,10 @@
         android:layout_row="5"
         android:layout_column="0"
         android:ems="10"
+        android:onClick="onClickDateEnd"
         android:hint="@string/date_end_medicine"
-        android:inputType="date" />
+        android:inputType="date"
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/textViewDateBegin"

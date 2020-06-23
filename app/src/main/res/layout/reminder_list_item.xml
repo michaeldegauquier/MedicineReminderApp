@@ -11,24 +11,38 @@
     android:id="@+id/reminder_item"
     style="@style/list_item_style">
 
-    <LinearLayout
-        style="@style/list_item_style"
-        android:layout_width="349dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="6dp">
 
-        <TextView
-            android:id="@+id/reminder_timeofday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/reminder_timeofday"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:text="14:00"
+        android:textSize="36sp" />
+
+
+    <GridLayout
+        android:layout_height="45dp"
+        android:layout_row="0"
+        android:layout_column="1">
 
         <TextView
             android:id="@+id/reminder_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:textSize="36sp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:text="@string/medicines"
+            android:textSize="14sp" />
+
+    </GridLayout>
 
     <ImageButton
         android:id="@+id/deleteButtonReminder"
@@ -39,6 +53,8 @@
         android:background="#EF0A0A"
         android:src="@drawable/ic_delete"
         tools:ignore="ContentDescription" />
+
+
 
 
 </GridLayout>

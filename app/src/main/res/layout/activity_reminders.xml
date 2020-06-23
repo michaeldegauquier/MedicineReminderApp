@@ -13,18 +13,17 @@
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_insert_reminder" />
 
-    <FrameLayout
+    <!--FrameLayout
         android:id="@+id/fragment_display_reminders"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent" /-->
 
 
-    <!--fragment
+    <fragment
         android:id="@+id/fragment_display_reminders"
         android:name="com.example.medicinereminderapp.fragments.DisplayRemindersFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_display_reminders"/-->
+        tools:layout="@layout/fragment_display_reminders"/>
 
 </LinearLayout>

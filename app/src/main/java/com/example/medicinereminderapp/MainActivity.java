@@ -14,7 +14,10 @@ import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.Medicine;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 
-import static com.example.medicinereminderapp.InsertMedicineActivity.EXTRA_MEDICINE_OBJ;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     public static final int INSERT_MEDICINE_REQUEST_CODE = 0;
@@ -57,10 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // get String data from Intent
                 Bundle returnBundle = data.getExtras();
-                //String title = data.getStringExtra(InsertMedicineActivity.EXTRA_MEDICINE_OBJ);
 
                 // set text view with string
-                AppRepository repo = new AppRepository(getApplication());
                 Medicine med = new Medicine();
 
                 if (returnBundle != null) {
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     med.dateBegin = returnBundle.getString("dateBegin");
                     med.dateEnd = returnBundle.getString("dateEnd");
                     Log.i("MEDICINE", med.name + " - " + med.dateBegin + " - " + med.dateEnd);
-                    repo.insertMedicine(med);
+                    mRepository.insertMedicine(med);
                     updateMedicineList();
                 }
             }

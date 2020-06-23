@@ -8,4 +8,5 @@
     <string name="add_reminder">Add Reminder</string>
     <string name="time_of_day">Time of day</string>
     <string name="amount">Amount of medicines</string>
+    <string name="medicines">medicines</string>
 </resources>
