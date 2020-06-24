@@ -18,15 +18,11 @@ import com.example.medicinereminderapp.R;
 import com.example.medicinereminderapp.RemindersActivity;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
-import com.example.medicinereminderapp.entities.Reminder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapter.MedicineViewHolder> {
     private Context context;
@@ -143,7 +139,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             diff = Math.abs(dateBegin.getTime() - dateEnd.getTime());
         }
 
-        long diffDates = diff / (24 * 60 * 60 * 1000);
+        long diffDates = diff / (24 * 60 * 60 * 1000) + 1;
         return (int) diffDates;
     }
 

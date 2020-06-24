@@ -10,4 +10,6 @@
     <string name="time_of_day">Uur</string>
     <string name="amount">Aantal medicijnen</string>
     <string name="medicines">medicijnen</string>
+    <string name="required_field">Dit veld is vereist!</string>
+    <string name="check_date_begin_end">Einddatum moet na begindatum komen.</string>
 </resources>

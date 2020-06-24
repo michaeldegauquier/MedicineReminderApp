@@ -9,4 +9,6 @@
     <string name="time_of_day">Time of day</string>
     <string name="amount">Amount of medicines</string>
     <string name="medicines">medicines</string>
+    <string name="required_field">This field is required!</string>
+    <string name="check_date_begin_end">Date end must be later than date begin</string>
 </resources>

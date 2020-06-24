@@ -12,12 +12,6 @@ import android.view.View;
 import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.Medicine;
-import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     public static final int INSERT_MEDICINE_REQUEST_CODE = 0;
