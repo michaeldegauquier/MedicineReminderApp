@@ -12,6 +12,7 @@ import android.view.View;
 import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.Medicine;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     public static final int INSERT_MEDICINE_REQUEST_CODE = 0;
