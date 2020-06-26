@@ -60,13 +60,13 @@ public class PharmaciesActivity extends AppCompatActivity {
 
     public void updatePharmacistList() {
         // Get a handle to the RecyclerView.
-        mRecyclerView = findViewById(R.id.recyclerview_pharmacies);
+        this.mRecyclerView = findViewById(R.id.recyclerview_pharmacies);
         // Create an adapter and supply the data to be displayed.
-        mAdapter = new PharmacistListAdapter(this, this.getPharmacists(), mRepository);
+        this.mAdapter = new PharmacistListAdapter(this, this.getPharmacists(), this.mRepository);
         // Connect the adapter with the RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
+        this.mRecyclerView.setAdapter(this.mAdapter);
         // Give the RecyclerView a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
 

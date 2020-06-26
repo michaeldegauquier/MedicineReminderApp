@@ -25,7 +25,7 @@ public class PharmacistListAdapter extends RecyclerView.Adapter<PharmacistListAd
     private final List<Pharmacist> myPharmacists;
 
     public PharmacistListAdapter(Context context, List<Pharmacist> myPharmacists, AppRepository repository) {
-        mInflater = LayoutInflater.from(context);
+        this.mInflater = LayoutInflater.from(context);
         this.myPharmacists = myPharmacists;
         this.context = context;
         this.repository = repository;
@@ -34,14 +34,14 @@ public class PharmacistListAdapter extends RecyclerView.Adapter<PharmacistListAd
     @NonNull
     @Override
     public PharmaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.pharmacies_list_item,
+        View mItemView = this.mInflater.inflate(R.layout.pharmacies_list_item,
                 parent, false);
         return new PharmaViewHolder(mItemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PharmaViewHolder holder, final int position) {
-        Pharmacist mCurrent = myPharmacists.get(position);
+        Pharmacist mCurrent = this.myPharmacists.get(position);
         holder.pharmaName.setText(mCurrent.name);
         holder.pharmaAddress.setText(mCurrent.address);
         holder.pharmaPhone.setText(mCurrent.phone);
@@ -71,8 +71,8 @@ public class PharmacistListAdapter extends RecyclerView.Adapter<PharmacistListAd
 
     @Override
     public int getItemCount() {
-        if (myPharmacists != null) {
-            return myPharmacists.size();
+        if (this.myPharmacists != null) {
+            return this.myPharmacists.size();
         }
         return 0;
     }
@@ -90,11 +90,11 @@ public class PharmacistListAdapter extends RecyclerView.Adapter<PharmacistListAd
         public PharmaViewHolder(View view, PharmacistListAdapter adapter) {
             super(view);
             this.view = view;
-            pharmaName = view.findViewById(R.id.pharma_name);
-            pharmaAddress = view.findViewById(R.id.pharma_address);
-            pharmaPhone = view.findViewById(R.id.pharma_phone);
-            phoneButton = view.findViewById(R.id.phoneButton);
-            locationButton = view.findViewById(R.id.locationButton);
+            this.pharmaName = view.findViewById(R.id.pharma_name);
+            this.pharmaAddress = view.findViewById(R.id.pharma_address);
+            this.pharmaPhone = view.findViewById(R.id.pharma_phone);
+            this.phoneButton = view.findViewById(R.id.phoneButton);
+            this.locationButton = view.findViewById(R.id.locationButton);
             this.mAdapter = adapter;
         }
     }

@@ -18,42 +18,42 @@ public class AppRepository {
 
     public AppRepository(Application application) {
         AppRoomDatabase db = AppRoomDatabase.getDatabase(application);
-        mMedicineDao = db.medicineDao();
-        mReminderDao = db.reminderDao();
+        this.mMedicineDao = db.medicineDao();
+        this.mReminderDao = db.reminderDao();
     }
 
     //Medicines
     public List<MedicineWithRemindersList> getAllMedicines() {
-        return mMedicineDao.getAllMedicines();
+        return this.mMedicineDao.getAllMedicines();
     }
 
     public MedicineWithRemindersList getMedicineById(int id) {
-        return mMedicineDao.getMedicineById(id);
+        return this.mMedicineDao.getMedicineById(id);
     }
 
     public void insertMedicine(Medicine medicine) {
-        mMedicineDao.insertMedicine(medicine);
+        this.mMedicineDao.insertMedicine(medicine);
     }
 
     public void updateMedicine(Medicine medicine) {
-        mMedicineDao.updateMedicine(medicine);
+        this.mMedicineDao.updateMedicine(medicine);
     }
 
     public void deleteMedicineById(int id) {
-        mMedicineDao.deleteMedicineById(id);
+        this.mMedicineDao.deleteMedicineById(id);
     }
 
     //Reminders
     public void insertReminder(Reminder reminder) {
-        mReminderDao.insertReminder(reminder);
+        this.mReminderDao.insertReminder(reminder);
     }
 
     public void updateReminder(Reminder reminder) {
-        mReminderDao.updateReminder(reminder);
+        this.mReminderDao.updateReminder(reminder);
     }
 
     public void deleteReminder(Reminder reminder) {
-        mReminderDao.deleteReminder(reminder);
+        this.mReminderDao.deleteReminder(reminder);
     }
 
     //Api

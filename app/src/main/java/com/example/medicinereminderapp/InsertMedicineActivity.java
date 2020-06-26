@@ -28,9 +28,9 @@ public class InsertMedicineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_medicine);
 
-        editTextNameMedicine = (EditText) findViewById(R.id.editTextNameMedicine);
-        editTextDateBegin = (EditText) findViewById(R.id.editTextDateBegin);
-        editTextDateEnd = (EditText) findViewById(R.id.editTextDateEnd);
+        this.editTextNameMedicine = (EditText) findViewById(R.id.editTextNameMedicine);
+        this.editTextDateBegin = (EditText) findViewById(R.id.editTextDateBegin);
+        this.editTextDateEnd = (EditText) findViewById(R.id.editTextDateEnd);
     }
 
     // create an action bar button

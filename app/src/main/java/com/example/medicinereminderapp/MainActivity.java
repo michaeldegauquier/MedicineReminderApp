@@ -28,13 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateMedicineList() {
         // Get a handle to the RecyclerView.
-        mRecyclerView = findViewById(R.id.recyclerview);
+        this.mRecyclerView = findViewById(R.id.recyclerview);
         // Create an adapter and supply the data to be displayed.
-        mAdapter = new MedicineListAdapter(this, mRepository.getAllMedicines(), mRepository);
+        this.mAdapter = new MedicineListAdapter(this, this.mRepository.getAllMedicines(), this.mRepository);
         // Connect the adapter with the RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
+        this.mRecyclerView.setAdapter(this.mAdapter);
         // Give the RecyclerView a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void insertMedicine(View view) {
@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
                     med.name = returnBundle.getString("name");
                     med.dateBegin = returnBundle.getString("dateBegin");
                     med.dateEnd = returnBundle.getString("dateEnd");
-                    mRepository.insertMedicine(med);
-                    updateMedicineList();
+                    this.mRepository.insertMedicine(med);
+                    this.updateMedicineList();
                 }
             }
         }

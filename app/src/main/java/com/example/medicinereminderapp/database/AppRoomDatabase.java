@@ -18,12 +18,10 @@ public abstract class AppRoomDatabase extends RoomDatabase {
 
     private static volatile AppRoomDatabase mINSTANCE;
 
-    static AppRoomDatabase getDatabase(final Context context)
-    {
-        if(mINSTANCE == null)
-        {
+    static AppRoomDatabase getDatabase(final Context context) {
+        if (mINSTANCE == null) {
             synchronized (AppRoomDatabase.class) {
-                if(mINSTANCE == null){
+                if (mINSTANCE == null) {
                     mINSTANCE =
                             Room.databaseBuilder(
                                     context.getApplicationContext(),

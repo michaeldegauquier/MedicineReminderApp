@@ -35,14 +35,14 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
     @NonNull
     @Override
     public ReminderListAdapter.ReminderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.reminder_list_item,
+        View mItemView = this.mInflater.inflate(R.layout.reminder_list_item,
                 parent, false);
         return new ReminderViewHolder(mItemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ReminderViewHolder holder, final int position) {
-        Reminder mCurrent = myReminders.get(position);
+        Reminder mCurrent = this.myReminders.get(position);
         holder.reminderTimeOfDay.setText(mCurrent.timeOfDay);
         String amount = mCurrent.amount + "";
         holder.reminderAmountMedicines.setText(amount);
@@ -70,8 +70,8 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
 
     @Override
     public int getItemCount() {
-        if (myReminders != null) {
-            return myReminders.size();
+        if (this.myReminders != null) {
+            return this.myReminders.size();
         }
         return 0;
     }
@@ -88,10 +88,10 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
         public ReminderViewHolder(View view, ReminderListAdapter adapter) {
             super(view);
             this.view = view;
-            reminderTimeOfDay = view.findViewById(R.id.reminder_timeofday);
-            reminderAmountMedicines = view.findViewById(R.id.reminder_amount);
-            deleteButtonReminder = view.findViewById(R.id.deleteButtonReminder);
-            reminderItem = view.findViewById(R.id.reminder_item);
+            this.reminderTimeOfDay = view.findViewById(R.id.reminder_timeofday);
+            this.reminderAmountMedicines = view.findViewById(R.id.reminder_amount);
+            this.deleteButtonReminder = view.findViewById(R.id.deleteButtonReminder);
+            this.reminderItem = view.findViewById(R.id.reminder_item);
             this.mAdapter = adapter;
         }
     }

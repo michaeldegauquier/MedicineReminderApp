@@ -17,19 +17,18 @@ public class InsertReminderFragment extends Fragment {
     public EditText editTextTime, editTextAmount;
     public Button button;
     private InsertReminderButtonFragmentListener mCallBack;
-    private View view;
 
     public InsertReminderFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_insert_reminder, container, false);
+        View view = inflater.inflate(R.layout.fragment_insert_reminder, container, false);
 
-        editTextTime = view.findViewById(R.id.editTextTimeReminder);
-        editTextAmount = view.findViewById(R.id.editTextAmountMedicines);
-        button = view.findViewById(R.id.buttonAddReminder);
+        this.editTextTime = view.findViewById(R.id.editTextTimeReminder);
+        this.editTextAmount = view.findViewById(R.id.editTextAmountMedicines);
+        this.button = view.findViewById(R.id.buttonAddReminder);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        this.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String time = editTextTime.getText().toString();
@@ -57,7 +56,7 @@ public class InsertReminderFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof InsertReminderButtonFragmentListener) {
-            mCallBack = (InsertReminderButtonFragmentListener) context;
+            this.mCallBack = (InsertReminderButtonFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement InsertReminderButtonFragmentListener");
         }
@@ -66,20 +65,20 @@ public class InsertReminderFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallBack = null;
+        this.mCallBack = null;
     }
 
     public boolean validate(String time, String amount) {
-        editTextTime.setError(null);
-        editTextAmount.setError(null);
+        this.editTextTime.setError(null);
+        this.editTextAmount.setError(null);
         if (time.length() == 0) {
-            editTextTime.requestFocus();
-            editTextTime.setError(getString(R.string.required_field));
+            this.editTextTime.requestFocus();
+            this.editTextTime.setError(getString(R.string.required_field));
             return false;
         }
         else if (amount.length() == 0) {
-            editTextAmount.requestFocus();
-            editTextAmount.setError(getString(R.string.required_field));
+            this.editTextAmount.requestFocus();
+            this.editTextAmount.setError(getString(R.string.required_field));
             return false;
         }
         return true;

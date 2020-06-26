@@ -24,9 +24,9 @@ public class DisplayRemindersFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        remindersActivity = (RemindersActivity) getActivity();
+        this.remindersActivity = (RemindersActivity) getActivity();
         View view = inflater.inflate(R.layout.fragment_display_reminders, container, false);
-        mRecyclerView = view.findViewById(R.id.recyclerview_reminders);
+        this.mRecyclerView = view.findViewById(R.id.recyclerview_reminders);
 
         return view;
     }
@@ -39,13 +39,14 @@ public class DisplayRemindersFragment extends Fragment {
     }
 
     public void updateRemindersList() {
-        mRepository = new AppRepository(remindersActivity.getApplication());
+        this.mRepository = new AppRepository(this.remindersActivity.getApplication());
         // Create an adapter and supply the data to be displayed.
-        mAdapter = new ReminderListAdapter(remindersActivity, mRepository.getMedicineById(remindersActivity.medicineId).reminders, mRepository);
+        this.mAdapter = new ReminderListAdapter(this.remindersActivity,
+                this.mRepository.getMedicineById(remindersActivity.medicineId).reminders, this.mRepository);
         // Connect the adapter with the RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
+        this.mRecyclerView.setAdapter(this.mAdapter);
         // Give the RecyclerView a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(remindersActivity));
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this.remindersActivity));
     }
 }
 

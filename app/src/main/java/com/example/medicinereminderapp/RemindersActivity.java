@@ -3,7 +3,6 @@ package com.example.medicinereminderapp;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -34,20 +33,20 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
-
+        this.mRepository = new AppRepository(getApplication());
         this.editTextTime = (EditText) findViewById(R.id.editTextTimeReminder);
 
         Intent intent = getIntent();
-        medicineId = intent.getIntExtra(MedicineListAdapter.MEDICINE_ID, -1);
+        this.medicineId = intent.getIntExtra(MedicineListAdapter.MEDICINE_ID, -1);
 
-        mRepository = new AppRepository(getApplication());
-        MedicineWithRemindersList medicine = mRepository.getMedicineById(medicineId);
+        MedicineWithRemindersList medicine = this.mRepository.getMedicineById(this.medicineId);
         setTitle(medicine.medicines.name);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        displayRemindersFragment = (DisplayRemindersFragment) fragmentManager.findFragmentById(R.id.fragment_display_reminders);
-        if (displayRemindersFragment == null) {
-            displayRemindersFragment = new DisplayRemindersFragment();
-            fragmentManager.beginTransaction().add(R.id.fragment_display_reminders, displayRemindersFragment).commit();
+        this.displayRemindersFragment = (DisplayRemindersFragment) fragmentManager.findFragmentById(R.id.fragment_display_reminders);
+        if (this.displayRemindersFragment == null) {
+            this.displayRemindersFragment = new DisplayRemindersFragment();
+            fragmentManager.beginTransaction().add(R.id.fragment_display_reminders, this.displayRemindersFragment).commit();
         }
     }
 
@@ -59,14 +58,10 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
             reminder.timeOfDay = bundle.getString("time");
             reminder.amount = Integer.parseInt(bundle.getString("amount"));
 
-            Log.i("id", medicineId + "");
-            Log.i("time", reminder.timeOfDay + "");
-            Log.i("amount", reminder.amount + "");
-
-            mRepository.insertReminder(reminder);
+            this.mRepository.insertReminder(reminder);
         }
         //Update the reminders
-        displayRemindersFragment.updateRemindersList();
+        this.displayRemindersFragment.updateRemindersList();
     }
 
     public void updateView() {
@@ -91,7 +86,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         String myFormat = "HH:mm"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
 
-        editTextTime.setText(sdf.format(myCalendar.getTime()));
+        this.editTextTime.setText(sdf.format(myCalendar.getTime()));
     }
 }
 

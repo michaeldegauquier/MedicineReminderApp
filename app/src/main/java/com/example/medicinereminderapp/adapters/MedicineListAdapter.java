@@ -32,7 +32,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     public static final String MEDICINE_ID = "MEDICINE_ID";
 
     public MedicineListAdapter(Context context, List<MedicineWithRemindersList> myMedicines, AppRepository repository) {
-        mInflater = LayoutInflater.from(context);
+        this.mInflater = LayoutInflater.from(context);
         this.myMedicines = myMedicines;
         this.context = context;
         this.repository = repository;
@@ -41,7 +41,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     @NonNull
     @Override
     public MedicineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.medicine_list_item,
+        View mItemView = this.mInflater.inflate(R.layout.medicine_list_item,
                 parent, false);
         return new MedicineViewHolder(mItemView, this);
     }
@@ -49,7 +49,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         try {
-            MedicineWithRemindersList mCurrent = myMedicines.get(position);
+            MedicineWithRemindersList mCurrent = this.myMedicines.get(position);
             int totalAmount = getTotalAmountMedicines(mCurrent.medicines.medicineId, repository);
             String medName = mCurrent.medicines.name + " - " + totalAmount;
             holder.medicineName.setText(medName);
@@ -94,8 +94,8 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 
     @Override
     public int getItemCount() {
-        if (myMedicines != null) {
-            return myMedicines.size();
+        if (this.myMedicines != null) {
+            return this.myMedicines.size();
         }
         return 0;
     }
@@ -150,11 +150,11 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         public MedicineViewHolder(View view, MedicineListAdapter adapter) {
             super(view);
             this.view = view;
-            medicineName = view.findViewById(R.id.medicine_name);
-            medicineDate = view.findViewById(R.id.medicine_date);
-            deleteButton = view.findViewById(R.id.deleteButton);
-            accessAlarmButton = view.findViewById(R.id.accessAlarmsButton);
-            medicineItem = view.findViewById(R.id.medicine_item);
+            this.medicineName = view.findViewById(R.id.medicine_name);
+            this.medicineDate = view.findViewById(R.id.medicine_date);
+            this.deleteButton = view.findViewById(R.id.deleteButton);
+            this.accessAlarmButton = view.findViewById(R.id.accessAlarmsButton);
+            this.medicineItem = view.findViewById(R.id.medicine_item);
             this.mAdapter = adapter;
         }
     }
