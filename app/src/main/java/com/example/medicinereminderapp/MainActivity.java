@@ -6,13 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.Medicine;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     public static final int INSERT_MEDICINE_REQUEST_CODE = 0;
@@ -44,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, INSERT_MEDICINE_REQUEST_CODE);
     }
 
+    public void getPharmacists(View view) {
+        Intent intent = new Intent(this, PharmaciesActivity.class);
+        startActivity(intent);
+    }
+
     // This method is called when the second activity (InsertMedicineActivity) finishes
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -63,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                     med.name = returnBundle.getString("name");
                     med.dateBegin = returnBundle.getString("dateBegin");
                     med.dateEnd = returnBundle.getString("dateEnd");
-                    Log.i("MEDICINE", med.name + " - " + med.dateBegin + " - " + med.dateEnd);
                     mRepository.insertMedicine(med);
                     updateMedicineList();
                 }

@@ -3,8 +3,9 @@ package com.example.medicinereminderapp;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,7 +22,6 @@ public class InsertMedicineActivity extends AppCompatActivity {
     final Calendar myCalendar = Calendar.getInstance();
 
     public EditText editTextNameMedicine, editTextDateBegin, editTextDateEnd;
-    public Button addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +31,27 @@ public class InsertMedicineActivity extends AppCompatActivity {
         editTextNameMedicine = (EditText) findViewById(R.id.editTextNameMedicine);
         editTextDateBegin = (EditText) findViewById(R.id.editTextDateBegin);
         editTextDateEnd = (EditText) findViewById(R.id.editTextDateEnd);
-        addButton = (Button) findViewById(R.id.addMedicineButton);
     }
 
-    public void addMedicine(View view) throws ParseException {
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_item_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.add_item) {
+            this.addMedicine();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void addMedicine() {
         // get the text from the EditText objects
         String nameMedicine = editTextNameMedicine.getText().toString();
         String dateBeginMedicine = editTextDateBegin.getText().toString();
@@ -54,7 +71,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
         }
     }
 
-    public boolean validate(String name, String dBegin, String dEnd) throws ParseException {
+    public boolean validate(String name, String dBegin, String dEnd) {
         editTextDateBegin.setError(null);
         editTextDateEnd.setError(null);
         if (name.length() == 0) {
@@ -74,8 +91,15 @@ public class InsertMedicineActivity extends AppCompatActivity {
         }
         else {
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            Date dateBegin = formatter.parse(dBegin);
-            Date dateEnd = formatter.parse(dEnd);
+            Date dateBegin = null;
+            Date dateEnd = null;
+
+            try {
+                dateBegin = formatter.parse(dBegin);
+                dateEnd = formatter.parse(dEnd);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             if (dateBegin.after(dateEnd)) {
                 editTextDateEnd.requestFocus();
@@ -145,3 +169,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
 // C-sharpcorner. How to Validate the Edit Text in Android Studio. Geraapleegd via
 // https://www.c-sharpcorner.com/UploadFile/1e5156/validation/
 // Geraadpleegd op 24 juni 2020
+
+// Stackoverflow. How to create button in Action bar in android. Geraadpleegd via
+// https://stackoverflow.com/questions/38158953/how-to-create-button-in-action-bar-in-android
+// Geraadpleegd op 26 juni 2020

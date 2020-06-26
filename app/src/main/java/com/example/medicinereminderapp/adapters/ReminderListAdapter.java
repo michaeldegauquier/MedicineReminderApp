@@ -60,7 +60,6 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
             @Override
             public void onClick(View v) {
                 Reminder reminder = myReminders.get(position);
-                Log.i("CLICKED DELETE", reminder.timeOfDay);
 
                 mRepository.deleteReminder(reminder);
                 notifyItemRemoved(position);

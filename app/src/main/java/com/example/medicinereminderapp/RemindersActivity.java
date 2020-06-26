@@ -11,6 +11,7 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 import com.example.medicinereminderapp.entities.Reminder;
@@ -37,7 +38,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         this.editTextTime = (EditText) findViewById(R.id.editTextTimeReminder);
 
         Intent intent = getIntent();
-        medicineId = intent.getIntExtra("MEDICINE_ID", -1);
+        medicineId = intent.getIntExtra(MedicineListAdapter.MEDICINE_ID, -1);
 
         mRepository = new AppRepository(getApplication());
         MedicineWithRemindersList medicine = mRepository.getMedicineById(medicineId);

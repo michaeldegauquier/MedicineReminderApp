@@ -7,8 +7,10 @@ import com.example.medicinereminderapp.daos.ReminderDao;
 import com.example.medicinereminderapp.entities.Medicine;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 import com.example.medicinereminderapp.entities.Reminder;
+import com.example.medicinereminderapp.httprequest.HttpGetRequest;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class AppRepository {
     private MedicineDao mMedicineDao;
@@ -53,4 +55,25 @@ public class AppRepository {
     public void deleteReminder(Reminder reminder) {
         mReminderDao.deleteReminder(reminder);
     }
+
+    //Api
+    public String getPharmacies() {
+        String myUrl = "https://opendata.brussels.be/api/records/1.0/search/?dataset=pharmacies1&q=&rows=20";
+        String result = "";
+        HttpGetRequest getRequest = new HttpGetRequest();
+
+        try {
+            result = getRequest.execute(myUrl).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }
+
+// Medium. Android AsyncTask HTTP GET request Tutorial. Geraadpleegd via
+// https://medium.com/@JasonCromer/android-asynctask-http-request-tutorial-6b429d833e28
+// Geraadpleegd op 26 juni 2020

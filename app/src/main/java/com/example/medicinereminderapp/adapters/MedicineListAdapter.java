@@ -29,6 +29,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     private LayoutInflater mInflater;
     private AppRepository repository;
     private final List<MedicineWithRemindersList> myMedicines;
+    public static final String MEDICINE_ID = "MEDICINE_ID";
 
     public MedicineListAdapter(Context context, List<MedicineWithRemindersList> myMedicines, AppRepository repository) {
         mInflater = LayoutInflater.from(context);
@@ -47,8 +48,6 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
-
-
         try {
             MedicineWithRemindersList mCurrent = myMedicines.get(position);
             int totalAmount = getTotalAmountMedicines(mCurrent.medicines.medicineId, repository);
@@ -57,8 +56,6 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 
             String medDate = mCurrent.medicines.dateBegin + " - " + mCurrent.medicines.dateEnd;
             holder.medicineDate.setText(medDate);
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -77,10 +74,8 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             public void onClick(View v) {
                 MedicineWithRemindersList medicine = myMedicines.get(position);
 
-                Log.i("CLICKED CLOCK", medicine.medicines.medicineId + "");
-
                 Intent intent = new Intent(context, RemindersActivity.class);
-                intent.putExtra("MEDICINE_ID", medicine.medicines.medicineId);
+                intent.putExtra(MEDICINE_ID, medicine.medicines.medicineId);
                 context.startActivity(intent);
             }
         });
@@ -89,7 +84,6 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             @Override
             public void onClick(View v) {
                 MedicineWithRemindersList medicine = myMedicines.get(position);
-                Log.i("CLICKED DELETE", medicine.medicines.name);
 
                 repository.deleteMedicineById(medicine.medicines.medicineId);
                 notifyItemRemoved(position);
