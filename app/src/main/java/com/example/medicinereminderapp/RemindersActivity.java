@@ -1,6 +1,9 @@
 package com.example.medicinereminderapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +31,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
     private AppRepository mRepository;
     private DisplayRemindersFragment displayRemindersFragment;
     public int medicineId;
+    public MedicineWithRemindersList medicine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         Intent intent = getIntent();
         this.medicineId = intent.getIntExtra(MedicineListAdapter.MEDICINE_ID, -1);
 
-        MedicineWithRemindersList medicine = this.mRepository.getMedicineById(this.medicineId);
+        this.medicine = this.mRepository.getMedicineById(this.medicineId);
         setTitle(medicine.medicines.name);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -48,6 +52,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
             this.displayRemindersFragment = new DisplayRemindersFragment();
             fragmentManager.beginTransaction().add(R.id.fragment_display_reminders, this.displayRemindersFragment).commit();
         }
+        cancelNotification(this, 4);
     }
 
     @Override
@@ -57,6 +62,11 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
             reminder.medicineId = medicineId;
             reminder.timeOfDay = bundle.getString("time");
             reminder.amount = Integer.parseInt(bundle.getString("amount"));
+
+            int hours = Integer.parseInt(bundle.getString("time").substring(0, 2));
+            int minutes = Integer.parseInt(bundle.getString("time").substring(3, 5));
+
+            startAlarmBroadcastReceiver(this, hours, minutes);
 
             this.mRepository.insertReminder(reminder);
         }
@@ -87,6 +97,36 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
 
         this.editTextTime.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    public void startAlarmBroadcastReceiver(Context context, int hours, int minutes) {
+        Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("medicineName", medicine.medicines.name);
+        myIntent.putExtras(bundle);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 4, myIntent, 0);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        //alarmManager.cancel(pendingIntent);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.YEAR, 2020);
+        calendar.set(Calendar.MONTH, Calendar.JULY);
+        calendar.set(Calendar.DAY_OF_MONTH, 23);
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 1000, pendingIntent);  //set repeating every 24 hours
+    }
+
+    public void cancelNotification(Context context, int notificationId) {
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("medicineName", medicine.medicines.name);
+        myIntent.putExtras(bundle);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, myIntent, 0);
+        alarmManager.cancel(pendingIntent);
     }
 }
 
