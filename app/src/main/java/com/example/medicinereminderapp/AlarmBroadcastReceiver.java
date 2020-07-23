@@ -53,3 +53,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         mNotificationManager.notify(4, mBuilder.build());
     }
 }
+
+// Stackoverflow. Android - Notification at specific time every day. Geraadpleegd via
+// https://stackoverflow.com/questions/51510509/android-notification-at-specific-time-every-day
+// Geraadpleegd op 23 juli 2020

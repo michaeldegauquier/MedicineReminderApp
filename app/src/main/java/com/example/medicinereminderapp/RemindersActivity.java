@@ -145,3 +145,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
 // Stackoverflow. TimePicker Dialog from clicking EditText. Geraadpleegd via
 // https://stackoverflow.com/questions/17901946/timepicker-dialog-from-clicking-edittext
 // Geraadpleegd op 23 juni 2020
+
+// Stackoverflow. Android - Notification at specific time every day. Geraadpleegd via
+// https://stackoverflow.com/questions/51510509/android-notification-at-specific-time-every-day
+// Geraadpleegd op 23 juli 2020
