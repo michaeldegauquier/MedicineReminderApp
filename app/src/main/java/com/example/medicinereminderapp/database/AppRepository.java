@@ -44,8 +44,8 @@ public class AppRepository {
     }
 
     //Reminders
-    public void insertReminder(Reminder reminder) {
-        this.mReminderDao.insertReminder(reminder);
+    public long insertReminder(Reminder reminder) {
+        return this.mReminderDao.insertReminder(reminder);
     }
 
     public void updateReminder(Reminder reminder) {

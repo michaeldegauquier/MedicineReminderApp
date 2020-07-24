@@ -22,15 +22,18 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         String CHANNEL_ID = "medchannel";// The id of the channel.
         CharSequence name = context.getResources().getString(R.string.app_name);// The user-visible name of the channel.
         NotificationCompat.Builder mBuilder;
+
         Intent notificationIntent = new Intent(context, MainActivity.class);
         Bundle bundle = new Bundle();
         notificationIntent.putExtras(bundle);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Bundle returnBundle = intent.getExtras();
         String title = returnBundle.getString("medicineName");
+        int notificationId = returnBundle.getInt("notificationId");
+
+        PendingIntent contentIntent = PendingIntent.getActivity(context, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= 26) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
@@ -50,7 +53,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         mBuilder.setContentIntent(contentIntent);
         mBuilder.setContentText("Take your medicines!");
         mBuilder.setAutoCancel(true);
-        mNotificationManager.notify(4, mBuilder.build());
+        mNotificationManager.notify(notificationId, mBuilder.build());
     }
 }
 

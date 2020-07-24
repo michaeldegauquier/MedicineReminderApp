@@ -18,6 +18,7 @@ import com.example.medicinereminderapp.R;
 import com.example.medicinereminderapp.RemindersActivity;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
+import com.example.medicinereminderapp.entities.Reminder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -84,6 +85,12 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
             @Override
             public void onClick(View v) {
                 MedicineWithRemindersList medicine = myMedicines.get(position);
+
+                for (int i = 0; i < medicine.reminders.size(); i++) {
+                    Reminder r = medicine.reminders.get(i);
+                    RemindersActivity.cancelNotification(context, r.reminderId);
+                    Log.i("DELETE_REMINDER R", "ID: " + r.reminderId);
+                }
 
                 repository.deleteMedicineById(medicine.medicines.medicineId);
                 notifyItemRemoved(position);
