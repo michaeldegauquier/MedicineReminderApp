@@ -13,4 +13,6 @@
     <string name="required_field">Dit veld is vereist!</string>
     <string name="check_date_begin_end">Einddatum moet na begindatum komen.</string>
     <string name="pharma">Apothekers</string>
+    <string name="take_amount_medicines_1">Je moet</string>
+    <string name="take_amount_medicines_2">medicijnen innemen.</string>
 </resources>

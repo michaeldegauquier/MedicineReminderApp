@@ -53,7 +53,6 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
             this.displayRemindersFragment = new DisplayRemindersFragment();
             fragmentManager.beginTransaction().add(R.id.fragment_display_reminders, this.displayRemindersFragment).commit();
         }
-        //cancelNotification(RemindersActivity.this, 4);
     }
 
     @Override
@@ -66,11 +65,13 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
 
             int hours = Integer.parseInt(bundle.getString("time").substring(0, 2));
             int minutes = Integer.parseInt(bundle.getString("time").substring(3, 5));
+            String dateBegin = medicine.medicines.dateBegin;
+            String dateEnd = medicine.medicines.dateEnd;
 
             long reminderId = this.mRepository.insertReminder(reminder);
             Log.i("ID_REMINDER", "ID: " + reminderId);
 
-            startAlarmBroadcastReceiver(this, hours, minutes, (int) reminderId);
+            startAlarmBroadcastReceiver(this, hours, minutes, (int) reminderId, reminder.amount, dateBegin, dateEnd);
         }
         //Update the reminders
         this.displayRemindersFragment.updateRemindersList();
@@ -101,35 +102,72 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         this.editTextTime.setText(sdf.format(myCalendar.getTime()));
     }
 
-    public void startAlarmBroadcastReceiver(Context context, int hours, int minutes, int notificationId) {
+    public void startAlarmBroadcastReceiver(Context context, int hours, int minutes, int notificationId, int amount, String dateBegin, String dateEnd) {
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         Bundle bundle = new Bundle();
         bundle.putString("medicineName", medicine.medicines.name);
         bundle.putInt("notificationId", notificationId);
+        bundle.putString("amount", getString(R.string.take_amount_medicines_1) + " " + amount + " " + getString(R.string.take_amount_medicines_2));
+        bundle.putBoolean("cancelAll", false);
         myIntent.putExtras(bundle);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, myIntent, 0);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        //alarmManager.cancel(pendingIntent);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.YEAR, 2020);
-        calendar.set(Calendar.MONTH, Calendar.JULY);
-        calendar.set(Calendar.DAY_OF_MONTH, 24);
+        calendar.set(Calendar.YEAR, getYearFromDate(dateBegin));
+        calendar.set(Calendar.MONTH, getMonthFromDate(dateBegin));
+        calendar.set(Calendar.DAY_OF_MONTH, getDayOfMonthFromDate(dateBegin));
         calendar.set(Calendar.HOUR_OF_DAY, hours);
         calendar.set(Calendar.MINUTE, minutes);
         calendar.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 1000, pendingIntent);  //set repeating every 24 hours
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, pendingIntent);  //set repeating every 24 hours
+        startAlarmBroadcastReceiverDateEnd(context, hours, minutes, notificationId, amount, dateEnd);
+    }
+
+    public void startAlarmBroadcastReceiverDateEnd(Context context, int hours, int minutes, int notificationId, int amount, String dateEnd) {
+        Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("medicineName", medicine.medicines.name);
+        bundle.putInt("notificationId", -notificationId);
+        bundle.putString("amount", getString(R.string.take_amount_medicines_1) + " " + amount + " " + getString(R.string.take_amount_medicines_2));
+        bundle.putBoolean("cancelAll", true);
+        myIntent.putExtras(bundle);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -notificationId, myIntent, 0);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.YEAR, getYearFromDate(dateEnd));
+        calendar.set(Calendar.MONTH, getMonthFromDate(dateEnd));
+        calendar.set(Calendar.DAY_OF_MONTH, getDayOfMonthFromDate(dateEnd));
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, pendingIntent);  //set repeating every 24 hour
     }
 
     public static void cancelNotification(Context context, int notificationId) {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
-        //Bundle bundle = new Bundle();
-        //bundle.putString("medicineName", medicine.medicines.name);
-        //myIntent.putExtras(bundle);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, myIntent, 0);
         alarmManager.cancel(pendingIntent);
+    }
+
+    public int getYearFromDate(String date) {
+        //Format dd/MM/yyyy
+        return Integer.parseInt(date.substring(6,10));
+    }
+
+    public int getDayOfMonthFromDate(String date) {
+        //Format dd/MM/yyyy
+        return Integer.parseInt(date.substring(0,2));
+    }
+
+    public int getMonthFromDate(String date) {
+        //Format dd/MM/yyyy
+        return Integer.parseInt(date.substring(3,5)) - 1;
     }
 }
 

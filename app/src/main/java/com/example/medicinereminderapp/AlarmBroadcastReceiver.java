@@ -31,6 +31,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Bundle returnBundle = intent.getExtras();
         String title = returnBundle.getString("medicineName");
         int notificationId = returnBundle.getInt("notificationId");
+        String amount = returnBundle.getString("amount");
+        boolean cancelAll = returnBundle.getBoolean("cancelAll");
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -51,9 +53,17 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         }
 
         mBuilder.setContentIntent(contentIntent);
-        mBuilder.setContentText("Take your medicines!");
+        mBuilder.setContentText(amount);
         mBuilder.setAutoCancel(true);
-        mNotificationManager.notify(notificationId, mBuilder.build());
+
+        if (cancelAll) {
+            RemindersActivity.cancelNotification(context, notificationId);
+            RemindersActivity.cancelNotification(context, -notificationId);
+        }
+
+        if (!cancelAll) {
+            mNotificationManager.notify(notificationId, mBuilder.build());
+        }
     }
 }
 
