@@ -131,12 +131,13 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         Date dateToday = formatter.parse(today);
 
         long diff = 0;
-        if (dateToday.after(dateBegin)) {
-            Log.i("date1", "Today after begin");
+        if (dateToday.after(dateEnd)) {
+            return 0;
+        }
+        else if (dateToday.after(dateBegin)) {
             diff = Math.abs(dateToday.getTime() - dateEnd.getTime());
         }
         else {
-            Log.i("date2", "Today not after begin");
             diff = Math.abs(dateBegin.getTime() - dateEnd.getTime());
         }
 

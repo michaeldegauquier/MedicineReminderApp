@@ -1,5 +1,8 @@
 package com.example.medicinereminderapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +30,9 @@ public class PharmaciesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pharmacies);
         this.mRepository = new AppRepository(getApplication());
-        this.updatePharmacistList();
+        if (checkInternetonnection()) {
+            this.updatePharmacistList();
+        }
     }
 
     public List<Pharmacist> getPharmacists() {
@@ -58,6 +63,16 @@ public class PharmaciesActivity extends AppCompatActivity {
         return pharmacists;
     }
 
+    public boolean checkInternetonnection() {
+        boolean connected = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+
+        return connected;
+    }
+
     public void updatePharmacistList() {
         // Get a handle to the RecyclerView.
         this.mRecyclerView = findViewById(R.id.recyclerview_pharmacies);
@@ -77,3 +92,7 @@ public class PharmaciesActivity extends AppCompatActivity {
 // Crunchify. How to Read JSON Object From File in Java? Geraadpleegd via
 // https://crunchify.com/how-to-read-json-object-from-file-in-java/
 // Geraadpleegd op 26 juni 2020
+
+// Stackoverflow. App crashes when no internet during Retrofit2 Get request. Geraadpleegd via
+// https://stackoverflow.com/questions/59168943/app-crashes-when-no-internet-during-retrofit2-get-request/59175084#59175084
+// Geraadpleegd op 26 juli 2020
