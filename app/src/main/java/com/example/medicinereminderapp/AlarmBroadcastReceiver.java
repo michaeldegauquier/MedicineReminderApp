@@ -40,7 +40,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         if (android.os.Build.VERSION.SDK_INT >= 26) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(mChannel);
-            mBuilder = new NotificationCompat.Builder(context)
+            mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setLights(Color.BLUE, 300, 300)
                     .setChannelId(CHANNEL_ID)
@@ -56,11 +56,13 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         mBuilder.setContentText(amount);
         mBuilder.setAutoCancel(true);
 
+        // if cancelAll is true -> both notifications (dateBegin, dateEnd) will be canceled
         if (cancelAll) {
             RemindersActivity.cancelNotification(context, notificationId);
             RemindersActivity.cancelNotification(context, -notificationId);
         }
 
+        // if cancelAll is false
         if (!cancelAll) {
             mNotificationManager.notify(notificationId, mBuilder.build());
         }
