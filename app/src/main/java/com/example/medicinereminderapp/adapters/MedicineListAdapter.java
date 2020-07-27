@@ -1,5 +1,6 @@
 package com.example.medicinereminderapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -57,7 +58,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 
             String medDate = mCurrent.medicines.dateBegin + " - " + mCurrent.medicines.dateEnd;
             holder.medicineDate.setText(medDate);
-        } catch (ParseException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -92,7 +93,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
                     RemindersActivity.cancelNotification(context, -r.reminderId);
                 }
 
-                repository.deleteMedicineById(medicine.medicines.medicineId);
+                repository.deleteMedicineById(medicine.medicines.medicineId, (Activity) context);
                 notifyItemRemoved(position);
                 ((MainActivity)context).updateMedicineList();
             }
@@ -107,13 +108,19 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         return 0;
     }
 
-    private int getTotalAmountMedicines(int medicineId, AppRepository repository) throws ParseException {
+    private int getTotalAmountMedicines(int medicineId, AppRepository repository) {
         MedicineWithRemindersList med = repository.getMedicineById(medicineId);
         if (med.reminders.size() <= 0) {
             return 0;
         }
         else {
-            int days = getDaysBetweenDates(med.medicines.dateBegin, med.medicines.dateEnd);
+            int days = 0;
+            try {
+                days = getDaysBetweenDates(med.medicines.dateBegin, med.medicines.dateEnd);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
             int amountMed = 0;
             for (int i = 0; i < med.reminders.size(); i++) {
                 amountMed += days * med.reminders.get(i).amount;
@@ -122,13 +129,21 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         }
     }
 
-    private int getDaysBetweenDates(String dBegin, String dEnd) throws ParseException {
+    private int getDaysBetweenDates(String dBegin, String dEnd) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String today = formatter.format(new Date());
 
-        Date dateBegin = formatter.parse(dBegin);
-        Date dateEnd = formatter.parse(dEnd);
-        Date dateToday = formatter.parse(today);
+        Date dateBegin = null;
+        Date dateEnd = null;
+        Date dateToday = null;
+
+        try {
+            dateBegin = formatter.parse(dBegin);
+            dateEnd = formatter.parse(dEnd);
+            dateToday = formatter.parse(today);
+        } catch (NullPointerException | ParseException e) {
+            e.printStackTrace();
+        }
 
         long diff = 0;
         if (dateToday.after(dateEnd)) {

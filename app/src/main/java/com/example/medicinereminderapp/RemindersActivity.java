@@ -68,7 +68,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
             String dateBegin = medicine.medicines.dateBegin;
             String dateEnd = medicine.medicines.dateEnd;
 
-            long reminderId = this.mRepository.insertReminder(reminder, this.displayRemindersFragment);
+            long reminderId = this.mRepository.insertReminder(reminder, this);
             Log.i("REMINDER_CREATED", "ID: " + reminderId);
 
             startAlarmBroadcastReceiver(this, hours, minutes, (int) reminderId, reminder.amount, dateBegin, dateEnd);
@@ -153,6 +153,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, myIntent, 0);
         alarmManager.cancel(pendingIntent);
+        Log.i("CANCELED", "Notification is canceled with id: " + notificationId);
     }
 
     public int getYearFromDate(String date) {

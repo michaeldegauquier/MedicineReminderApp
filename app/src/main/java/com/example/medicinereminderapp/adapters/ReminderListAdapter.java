@@ -1,5 +1,6 @@
 package com.example.medicinereminderapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
                 RemindersActivity.cancelNotification(context, reminder.reminderId);
                 RemindersActivity.cancelNotification(context, -reminder.reminderId);
 
-                mRepository.deleteReminder(reminder);
+                mRepository.deleteReminder(reminder, (Activity) context);
                 notifyItemRemoved(position);
                 ((RemindersActivity)context).updateView();
             }
