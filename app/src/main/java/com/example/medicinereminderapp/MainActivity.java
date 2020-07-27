@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     med.name = returnBundle.getString("name");
                     med.dateBegin = returnBundle.getString("dateBegin");
                     med.dateEnd = returnBundle.getString("dateEnd");
-                    this.mRepository.insertMedicine(med);
+                    this.mRepository.insertMedicine(med, this);
                     this.updateMedicineList();
                 }
             }

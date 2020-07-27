@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -60,6 +61,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         if (cancelAll) {
             RemindersActivity.cancelNotification(context, notificationId);
             RemindersActivity.cancelNotification(context, -notificationId);
+            Log.i("CANCELED", notificationId + " + " + -notificationId);
         }
 
         // if cancelAll is false

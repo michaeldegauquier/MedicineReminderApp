@@ -3,7 +3,6 @@ package com.example.medicinereminderapp.daos;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.medicinereminderapp.entities.Medicine;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
@@ -20,9 +19,6 @@ public interface MedicineDao {
 
     @Insert
     void insertMedicine(Medicine medicine);
-
-    @Update
-    void updateMedicine(Medicine medicine);
 
     @Query("DELETE FROM medicines WHERE medicineId LIKE :id")
     void deleteMedicineById(int id);

@@ -68,8 +68,8 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
             String dateBegin = medicine.medicines.dateBegin;
             String dateEnd = medicine.medicines.dateEnd;
 
-            long reminderId = this.mRepository.insertReminder(reminder);
-            Log.i("ID_REMINDER", "ID: " + reminderId);
+            long reminderId = this.mRepository.insertReminder(reminder, this.displayRemindersFragment);
+            Log.i("REMINDER_CREATED", "ID: " + reminderId);
 
             startAlarmBroadcastReceiver(this, hours, minutes, (int) reminderId, reminder.amount, dateBegin, dateEnd);
         }

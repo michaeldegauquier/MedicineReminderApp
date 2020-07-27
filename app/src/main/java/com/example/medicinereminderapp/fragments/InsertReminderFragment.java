@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.medicinereminderapp.R;
 
+import java.util.concurrent.ExecutionException;
+
 public class InsertReminderFragment extends Fragment {
 
     public EditText editTextTime, editTextAmount;
@@ -39,7 +41,13 @@ public class InsertReminderFragment extends Fragment {
                     bundle.putString("time", time);
                     bundle.putString("amount", amount);
 
-                    mCallBack.insertReminder(bundle);
+                    try {
+                        mCallBack.insertReminder(bundle);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -48,7 +56,7 @@ public class InsertReminderFragment extends Fragment {
     }
 
     public interface InsertReminderButtonFragmentListener {
-        void insertReminder(Bundle bundle);
+        void insertReminder(Bundle bundle) throws ExecutionException, InterruptedException;
     }
 
     // This method insures that the Activity has actually implemented our listener and that it isn't null.

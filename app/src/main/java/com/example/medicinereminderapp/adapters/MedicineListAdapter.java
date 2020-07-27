@@ -89,7 +89,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
                 for (int i = 0; i < medicine.reminders.size(); i++) {
                     Reminder r = medicine.reminders.get(i);
                     RemindersActivity.cancelNotification(context, r.reminderId);
-                    Log.i("DELETE_REMINDER R", "ID: " + r.reminderId);
+                    RemindersActivity.cancelNotification(context, -r.reminderId);
                 }
 
                 repository.deleteMedicineById(medicine.medicines.medicineId);

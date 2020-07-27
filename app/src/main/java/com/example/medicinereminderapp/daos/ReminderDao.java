@@ -4,7 +4,6 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
-import androidx.room.Update;
 
 import com.example.medicinereminderapp.entities.Reminder;
 
@@ -12,9 +11,6 @@ import com.example.medicinereminderapp.entities.Reminder;
 public interface ReminderDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertReminder(Reminder reminder);
-
-    @Update
-    void updateReminder(Reminder reminder);
 
     @Delete
     void deleteReminder(Reminder reminder);
