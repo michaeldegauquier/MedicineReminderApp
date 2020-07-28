@@ -28,11 +28,31 @@ public class AppRepository {
 
     //Medicines
     public List<MedicineWithRemindersList> getAllMedicines() {
-        return this.mMedicineDao.getAllMedicines();
+        List<MedicineWithRemindersList> medList = null;
+
+        try {
+            medList = new getAllMedicinesAsync(this.mMedicineDao).execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return medList;
     }
 
     public MedicineWithRemindersList getMedicineById(int id) {
-        return this.mMedicineDao.getMedicineById(id);
+        MedicineWithRemindersList med = null;
+
+        try {
+            med = new getMedicineByIdAsync(this.mMedicineDao).execute(id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return med;
     }
 
     public void insertMedicine(Medicine medicine, Activity activity) {
@@ -48,7 +68,7 @@ public class AppRepository {
         long notificationId = 0;
 
         try {
-            notificationId =  new insertReminderAsync(this.mReminderDao, activity).execute(reminder).get();
+            notificationId = new insertReminderAsync(this.mReminderDao, activity).execute(reminder).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -80,10 +100,32 @@ public class AppRepository {
     }
 
     //get all Medicines (with Reminders)
+    private static class getAllMedicinesAsync extends AsyncTask<Void, Void, List<MedicineWithRemindersList>> {
+        private MedicineDao medicineDao;
 
+        getAllMedicinesAsync(MedicineDao medicineDao) {
+            this.medicineDao = medicineDao;
+        }
+
+        @Override
+        protected List<MedicineWithRemindersList> doInBackground(Void... voids) {
+            return this.medicineDao.getAllMedicines();
+        }
+    }
 
     //get Medicine (with Reminders) by ID
+    private static class getMedicineByIdAsync extends AsyncTask<Integer, Void, MedicineWithRemindersList> {
+        private MedicineDao medicineDao;
 
+        getMedicineByIdAsync(MedicineDao medicineDao) {
+            this.medicineDao = medicineDao;
+        }
+
+        @Override
+        protected MedicineWithRemindersList doInBackground(Integer... integers) {
+            return this.medicineDao.getMedicineById(integers[0]);
+        }
+    }
 
     //insert Medicine
     private static class insertMedicineAsync extends AsyncTask<Medicine, Void, Void> {
@@ -97,7 +139,7 @@ public class AppRepository {
 
         @Override
         protected Void doInBackground(Medicine... medicines) {
-            medicineDao.insertMedicine(medicines[0]);
+            this.medicineDao.insertMedicine(medicines[0]);
             return null;
         }
 
@@ -119,7 +161,7 @@ public class AppRepository {
 
         @Override
         protected Void doInBackground(Integer... integers) {
-            medicineDao.deleteMedicineById(integers[0]);
+            this.medicineDao.deleteMedicineById(integers[0]);
             return null;
         }
 
@@ -141,7 +183,7 @@ public class AppRepository {
 
         @Override
         protected Long doInBackground(Reminder... reminders) {
-            return reminderDao.insertReminder(reminders[0]);
+            return this.reminderDao.insertReminder(reminders[0]);
         }
 
         @Override
@@ -162,7 +204,7 @@ public class AppRepository {
 
         @Override
         protected Void doInBackground(Reminder... reminders) {
-            reminderDao.deleteReminder(reminders[0]);
+            this.reminderDao.deleteReminder(reminders[0]);
             return null;
         }
 
