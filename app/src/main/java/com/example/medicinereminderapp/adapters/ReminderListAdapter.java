@@ -57,6 +57,16 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
             }
         });
 
+        holder.notificationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Reminder reminder = myReminders.get(position);
+                ((RemindersActivity)context).openFrameDisplayNotifications(reminder.reminderId);
+
+                Log.i("CLICKED NOTIF REMINDER", reminder.timeOfDay);
+            }
+        });
+
         holder.deleteButtonReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +93,7 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
         public final View view;
         public final TextView reminderTimeOfDay;
         public final TextView reminderAmountMedicines;
+        public final ImageButton notificationsButton;
         public final ImageButton deleteButtonReminder;
         public final GridLayout reminderItem;
 
@@ -93,6 +104,7 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
             this.view = view;
             this.reminderTimeOfDay = view.findViewById(R.id.reminder_timeofday);
             this.reminderAmountMedicines = view.findViewById(R.id.reminder_amount);
+            this.notificationsButton = view.findViewById(R.id.notificationsButton);
             this.deleteButtonReminder = view.findViewById(R.id.deleteButtonReminder);
             this.reminderItem = view.findViewById(R.id.reminder_item);
             this.mAdapter = adapter;

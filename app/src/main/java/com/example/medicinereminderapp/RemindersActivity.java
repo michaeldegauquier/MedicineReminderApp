@@ -9,15 +9,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
 import com.example.medicinereminderapp.entities.Reminder;
+import com.example.medicinereminderapp.fragments.DisplayNotificationsFragment;
 import com.example.medicinereminderapp.fragments.DisplayRemindersFragment;
 import com.example.medicinereminderapp.fragments.InsertReminderFragment;
 
@@ -25,12 +28,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class RemindersActivity extends AppCompatActivity implements InsertReminderFragment.InsertReminderButtonFragmentListener {
+public class RemindersActivity extends AppCompatActivity implements InsertReminderFragment.InsertReminderButtonFragmentListener, DisplayNotificationsFragment.OnFragmentInteractionListener {
     final Calendar myCalendar = Calendar.getInstance();
 
     public EditText editTextTime;
     private AppRepository mRepository;
     private DisplayRemindersFragment displayRemindersFragment;
+    private FrameLayout frameContainer;
     public int medicineId;
     public MedicineWithRemindersList medicine;
 
@@ -40,9 +44,11 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         setContentView(R.layout.activity_reminders);
         this.mRepository = new AppRepository(getApplication());
         this.editTextTime = (EditText) findViewById(R.id.editTextTimeReminder);
+        this.frameContainer = (FrameLayout) findViewById(R.id.fragment_display_notifications);
 
         Intent intent = getIntent();
         this.medicineId = intent.getIntExtra(MedicineListAdapter.MEDICINE_ID, -1);
+        Log.i("ID MEDICINE", this.medicineId + "");
 
         this.medicine = this.mRepository.getMedicineById(this.medicineId);
         setTitle(medicine.medicines.name);
@@ -79,6 +85,15 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
 
     public void updateView() {
         displayRemindersFragment.updateRemindersList();
+    }
+
+    public void openFrameDisplayNotifications(int reminderId) {
+        DisplayNotificationsFragment fragment = DisplayNotificationsFragment.newInstance(reminderId);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.add(R.id.fragment_display_notifications, fragment, "FRAGMENT_NOTIFICATIONS").commit();
     }
 
     TimePickerDialog.OnTimeSetListener timeOfDay = new TimePickerDialog.OnTimeSetListener() {
@@ -170,6 +185,11 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         //Format dd/MM/yyyy
         return Integer.parseInt(date.substring(3,5)) - 1;
     }
+
+    @Override
+    public void OnFragmentInteraction(int reminderId) {
+        Log.i("BACK", reminderId + "");
+    }
 }
 
 // Stackoverflow. How do I pass data between Activities in Android application? Geraadpleegd via
@@ -191,3 +211,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
 // Stackoverflow. Android - Notification at specific time every day. Geraadpleegd via
 // https://stackoverflow.com/questions/51510509/android-notification-at-specific-time-every-day
 // Geraadpleegd op 23 juli 2020
+
+// Coding in Flow. Open a Fragment with an Animation + Communicate with Activity - Android Studio Tutorial. Geraadpleegd via
+// https://codinginflow.com/tutorials/android/fragment-animation-interface
+// Geraadpleegd op 28 juli 2020

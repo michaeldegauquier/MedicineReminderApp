@@ -7,7 +7,7 @@
     android:useDefaultMargins="true"
     android:alignmentMode="alignBounds"
     android:columnOrderPreserved="false"
-    android:columnCount="4"
+    android:columnCount="5"
     android:id="@+id/reminder_item"
     style="@style/list_item_style"
     android:background="@drawable/border_list_item"
@@ -54,13 +54,21 @@
         android:layout_width="42dp"
         android:layout_height="50dp"
         android:layout_row="0"
-        android:layout_column="3"
+        android:layout_column="4"
         android:background="@android:color/white"
         android:src="@drawable/ic_delete"
         android:tint="#e80e0e"
         tools:ignore="ContentDescription" />
 
-
-
+    <ImageButton
+        android:id="@+id/notificationsButton"
+        android:layout_width="42dp"
+        android:layout_height="50dp"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:background="@android:color/white"
+        android:src="@drawable/ic_delete"
+        android:tint="@color/colorPrimary"
+        tools:ignore="ContentDescription" />
 
 </GridLayout>

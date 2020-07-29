@@ -28,10 +28,14 @@ public class PharmaciesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pharmacies);
+
         this.mRepository = new AppRepository(getApplication());
-        if (checkInternetonnection()) {
+        if (checkInternetConnection()) {
+            setContentView(R.layout.activity_pharmacies);
             this.updatePharmacistList();
+        }
+        else {
+            setContentView(R.layout.no_internet);
         }
     }
 
@@ -63,7 +67,7 @@ public class PharmaciesActivity extends AppCompatActivity {
         return pharmacists;
     }
 
-    public boolean checkInternetonnection() {
+    public boolean checkInternetConnection() {
         boolean connected = false;
 
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);

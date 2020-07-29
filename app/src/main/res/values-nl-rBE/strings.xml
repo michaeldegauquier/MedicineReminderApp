@@ -15,4 +15,6 @@
     <string name="pharma">Apothekers</string>
     <string name="take_amount_medicines_1">Je moet</string>
     <string name="take_amount_medicines_2">medicijnen innemen.</string>
+    <string name="no_internet">Geen data gevonden! Controleer uw internetverbinding.</string>
+    <string name="takenMedicine">Ingenomen</string>
 </resources>
