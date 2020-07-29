@@ -1,6 +1,7 @@
 package com.example.medicinereminderapp;
 
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -19,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
+import com.example.medicinereminderapp.entities.Notification;
 import com.example.medicinereminderapp.entities.Reminder;
 import com.example.medicinereminderapp.fragments.DisplayNotificationsFragment;
 import com.example.medicinereminderapp.fragments.DisplayRemindersFragment;
@@ -26,6 +28,7 @@ import com.example.medicinereminderapp.fragments.InsertReminderFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class RemindersActivity extends AppCompatActivity implements InsertReminderFragment.InsertReminderButtonFragmentListener, DisplayNotificationsFragment.OnFragmentInteractionListener {
@@ -83,7 +86,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         this.displayRemindersFragment.updateRemindersList();
     }
 
-    public void updateView() {
+    public void updateRemindersView() {
         displayRemindersFragment.updateRemindersList();
     }
 
@@ -111,22 +114,23 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
     }
 
     private void updateTime() {
-        String myFormat = "HH:mm"; //In which you need put here
+        String myFormat = "HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
 
         this.editTextTime.setText(sdf.format(myCalendar.getTime()));
     }
 
-    public void startAlarmBroadcastReceiver(Context context, int hours, int minutes, int notificationId, int amount, String dateBegin, String dateEnd) {
+    public void startAlarmBroadcastReceiver(Context context, int hours, int minutes, int reminderId, int amount, String dateBegin, String dateEnd) {
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         Bundle bundle = new Bundle();
         bundle.putString("medicineName", medicine.medicines.name);
-        bundle.putInt("notificationId", notificationId);
+        bundle.putInt("notificationId", reminderId);
+        bundle.putString("timeOfDay", hours + ":" + minutes);
         bundle.putString("amount", getString(R.string.take_amount_medicines_1) + " " + amount + " " + getString(R.string.take_amount_medicines_2));
         bundle.putBoolean("cancelAll", false);
         myIntent.putExtras(bundle);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminderId, myIntent, 0);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -137,19 +141,20 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         calendar.set(Calendar.MINUTE, minutes);
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, pendingIntent);  //set repeating every 24 hours
-        startAlarmBroadcastReceiverDateEnd(context, hours, minutes, notificationId, amount, dateEnd);
+        startAlarmBroadcastReceiverDateEnd(context, hours, minutes, reminderId, amount, dateEnd);
     }
 
-    public void startAlarmBroadcastReceiverDateEnd(Context context, int hours, int minutes, int notificationId, int amount, String dateEnd) {
+    public void startAlarmBroadcastReceiverDateEnd(Context context, int hours, int minutes, int reminderId, int amount, String dateEnd) {
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         Bundle bundle = new Bundle();
         bundle.putString("medicineName", medicine.medicines.name);
-        bundle.putInt("notificationId", -notificationId);
+        bundle.putInt("notificationId", -reminderId);
+        bundle.putString("timeOfDay", hours + ":" + minutes);
         bundle.putString("amount", getString(R.string.take_amount_medicines_1) + " " + amount + " " + getString(R.string.take_amount_medicines_2));
         bundle.putBoolean("cancelAll", true);
         myIntent.putExtras(bundle);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -notificationId, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -reminderId, myIntent, 0);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
         Calendar calendar = Calendar.getInstance();
@@ -163,12 +168,29 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, pendingIntent);  //set repeating every 24 hour
     }
 
-    public static void cancelNotification(Context context, int notificationId) {
+    public static void cancelNotification(Context context, int reminderId) {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminderId, myIntent, 0);
         alarmManager.cancel(pendingIntent);
-        Log.i("CANCELED", "Notification is canceled with id: " + notificationId);
+        Log.i("CANCELED", "Notification is canceled with id: " + reminderId);
+    }
+
+    public static void insertNotificationItem(Context context, int reminderId, String timeOfDay) {
+        AppRepository mRepository = new AppRepository((Application) context.getApplicationContext());
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String dateToday = formatter.format(date);
+
+        Notification notification = new Notification();
+        notification.reminderId = reminderId;
+        notification.date = dateToday;
+        notification.hour = timeOfDay;
+        notification.medicineTaken = false;
+
+        long id = mRepository.insertNotification(notification);
+        //int id = reminderId;
+        Log.i("NOTIF INSERTED", "notif is inserted with ID: " + id);
     }
 
     public int getYearFromDate(String date) {

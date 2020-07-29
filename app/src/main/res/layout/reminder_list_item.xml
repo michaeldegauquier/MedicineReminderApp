@@ -67,7 +67,7 @@
         android:layout_row="0"
         android:layout_column="3"
         android:background="@android:color/white"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_notification"
         android:tint="@color/colorPrimary"
         tools:ignore="ContentDescription" />
 

@@ -7,9 +7,11 @@ import android.os.AsyncTask;
 import com.example.medicinereminderapp.MainActivity;
 import com.example.medicinereminderapp.RemindersActivity;
 import com.example.medicinereminderapp.daos.MedicineDao;
+import com.example.medicinereminderapp.daos.NotificationDao;
 import com.example.medicinereminderapp.daos.ReminderDao;
 import com.example.medicinereminderapp.entities.Medicine;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
+import com.example.medicinereminderapp.entities.Notification;
 import com.example.medicinereminderapp.entities.Reminder;
 import com.example.medicinereminderapp.httprequest.HttpGetRequest;
 
@@ -19,11 +21,13 @@ import java.util.concurrent.ExecutionException;
 public class AppRepository {
     private MedicineDao mMedicineDao;
     private ReminderDao mReminderDao;
+    private NotificationDao mNotificationDao;
 
     public AppRepository(Application application) {
         AppRoomDatabase db = AppRoomDatabase.getDatabase(application);
         this.mMedicineDao = db.medicineDao();
         this.mReminderDao = db.reminderDao();
+        this.mNotificationDao = db.notificationDao();
     }
 
     //Medicines
@@ -65,10 +69,43 @@ public class AppRepository {
 
     //Reminders
     public long insertReminder(Reminder reminder, Activity activity) {
+        long reminderId = 0;
+
+        try {
+            reminderId = new insertReminderAsync(this.mReminderDao, activity).execute(reminder).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return reminderId;
+    }
+
+    public void deleteReminder(Reminder reminder, Activity activity) {
+        new deleteReminderByIdAsync(this.mReminderDao, activity).execute(reminder);
+    }
+
+    //Notifications
+    public List<Notification> getNotificationsByReminderId(int reminderId) {
+        List<Notification> notifList = null;
+
+        try {
+            notifList = new getNotificationsByReminderIdAsync(this.mNotificationDao).execute(reminderId).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return notifList;
+    }
+
+    public long insertNotification(Notification notification) {
         long notificationId = 0;
 
         try {
-            notificationId = new insertReminderAsync(this.mReminderDao, activity).execute(reminder).get();
+            notificationId = new insertNotificationAsync(this.mNotificationDao).execute(notification).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -78,8 +115,12 @@ public class AppRepository {
         return notificationId;
     }
 
-    public void deleteReminder(Reminder reminder, Activity activity) {
-        new deleteReminderByIdAsync(this.mReminderDao, activity).execute(reminder);
+    public void updateNotification(Notification notification, Activity activity) {
+
+    }
+
+    public void deleteNotificationsByReminderId(int reminderId) {
+        new deleteNotificationsByReminderIdAsync(this.mNotificationDao).execute(reminderId);
     }
 
     //Api
@@ -188,7 +229,7 @@ public class AppRepository {
 
         @Override
         protected void onPostExecute(Long id) {
-            ((RemindersActivity)activity).updateView();
+            ((RemindersActivity)activity).updateRemindersView();
         }
     }
 
@@ -210,7 +251,53 @@ public class AppRepository {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            ((RemindersActivity)activity).updateView();
+            ((RemindersActivity)activity).updateRemindersView();
+        }
+    }
+
+    //get all Notifications by reminderId
+    private static class getNotificationsByReminderIdAsync extends AsyncTask<Integer, Void, List<Notification>> {
+        private NotificationDao notificationDao;
+
+        getNotificationsByReminderIdAsync(NotificationDao notificationDao) {
+            this.notificationDao = notificationDao;
+        }
+
+        @Override
+        protected List<Notification> doInBackground(Integer... integers) {
+            return this.notificationDao.getNotificationsByReminderId(integers[0]);
+        }
+    }
+
+    //insert Notification
+    private static class insertNotificationAsync extends AsyncTask<Notification, Void, Long> {
+        private NotificationDao notificationDao;
+
+        insertNotificationAsync(NotificationDao notificationDao) {
+            this.notificationDao = notificationDao;
+        }
+
+        @Override
+        protected Long doInBackground(Notification... notifications) {
+            return this.notificationDao.insertNotification(notifications[0]);
+        }
+    }
+
+    //update Notification
+
+
+    //delete all notifications by reminderId
+    private static class deleteNotificationsByReminderIdAsync extends AsyncTask<Integer, Void, Void> {
+        private NotificationDao notificationDao;
+
+        deleteNotificationsByReminderIdAsync(NotificationDao notificationDao) {
+            this.notificationDao = notificationDao;
+        }
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            this.notificationDao.deleteNotificationsByReminderId(integers[0]);
+            return null;
         }
     }
 }

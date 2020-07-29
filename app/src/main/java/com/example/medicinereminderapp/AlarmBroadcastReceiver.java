@@ -1,5 +1,6 @@
 package com.example.medicinereminderapp;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.medicinereminderapp.database.AppRepository;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
@@ -31,11 +34,12 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
         Bundle returnBundle = intent.getExtras();
         String title = returnBundle.getString("medicineName");
-        int notificationId = returnBundle.getInt("notificationId");
+        int reminderId = returnBundle.getInt("notificationId");
+        String timeOfDay = returnBundle.getString("timeOfDay");
         String amount = returnBundle.getString("amount");
         boolean cancelAll = returnBundle.getBoolean("cancelAll");
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, reminderId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= 26) {
@@ -59,14 +63,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
         // if cancelAll is true -> both notifications (dateBegin, dateEnd) will be canceled
         if (cancelAll) {
-            RemindersActivity.cancelNotification(context, notificationId);
-            RemindersActivity.cancelNotification(context, -notificationId);
-            Log.i("CANCELED", notificationId + " + " + -notificationId);
+            RemindersActivity.cancelNotification(context, reminderId);
+            RemindersActivity.cancelNotification(context, -reminderId);
+            Log.i("CANCELED", reminderId + " + " + -reminderId);
         }
 
         // if cancelAll is false
         if (!cancelAll) {
-            mNotificationManager.notify(notificationId, mBuilder.build());
+            RemindersActivity.insertNotificationItem(context, reminderId, timeOfDay);
+            mNotificationManager.notify(reminderId, mBuilder.build());
         }
     }
 }

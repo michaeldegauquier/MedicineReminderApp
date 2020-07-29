@@ -108,10 +108,6 @@ public class PharmacistListAdapter extends RecyclerView.Adapter<PharmacistListAd
 // https://android--code.blogspot.com/2015/12/android-recyclerview-add-remove-item.html
 // Geraadpleegd op 18 juni 2020
 
-// Stackoverflow. Calculating days between two dates with Java. Geraadpleegd via
-// https://stackoverflow.com/questions/20165564/calculating-days-between-two-dates-with-java
-// Geraadpleegd op 23 juni 2020
-
 // Stackoverflow. How do I get the dialer to open with phone number displayed? Geraadpleegd via
 // https://stackoverflow.com/questions/11699819/how-do-i-get-the-dialer-to-open-with-phone-number-displayed
 // Geraadpleegd op 23 juni 2020

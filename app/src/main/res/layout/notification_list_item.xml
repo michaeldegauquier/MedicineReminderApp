@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:useDefaultMargins="true"
     android:alignmentMode="alignBounds"
     android:columnOrderPreserved="false"
     android:columnCount="5"
-    android:id="@+id/reminder_item"
+    android:id="@+id/notification_item"
     style="@style/list_item_style"
     android:background="@drawable/border_list_item"
     android:layout_marginBottom="4dp"

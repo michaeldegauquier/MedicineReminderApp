@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicinereminderapp.R;
 import com.example.medicinereminderapp.RemindersActivity;
-import com.example.medicinereminderapp.adapters.ReminderListAdapter;
+import com.example.medicinereminderapp.adapters.NotificationListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 
 public class DisplayNotificationsFragment extends Fragment {
@@ -21,7 +22,7 @@ public class DisplayNotificationsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ReminderListAdapter mAdapter;
+    private NotificationListAdapter mAdapter;
     private AppRepository mRepository;
     private RecyclerView mRecyclerView;
     private RemindersActivity remindersActivity;
@@ -60,6 +61,18 @@ public class DisplayNotificationsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        this.updateNotificationsList();
+    }
+
+    public void updateNotificationsList() {
+        this.mRepository = new AppRepository(this.remindersActivity.getApplication());
+        // Create an adapter and supply the data to be displayed.
+        this.mAdapter = new NotificationListAdapter(this.remindersActivity,
+                this.mRepository.getNotificationsByReminderId(mReminderId), this.mRepository);
+        // Connect the adapter with the RecyclerView.
+        this.mRecyclerView.setAdapter(this.mAdapter);
+        // Give the RecyclerView a default layout manager.
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this.remindersActivity));
     }
 
     public void onButtonPressed(int sendBackId) {

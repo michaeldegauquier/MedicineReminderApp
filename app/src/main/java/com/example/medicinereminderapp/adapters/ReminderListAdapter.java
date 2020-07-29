@@ -76,7 +76,7 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
 
                 mRepository.deleteReminder(reminder, (Activity) context);
                 notifyItemRemoved(position);
-                ((RemindersActivity)context).updateView();
+                ((RemindersActivity)context).updateRemindersView();
             }
         });
     }
@@ -111,3 +111,11 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
         }
     }
 }
+
+// Codebrainer. RecyclerView for Android Beginners - How to display data. Geraadpleegd via
+// https://www.codebrainer.com/blog/how-to-display-data-with-recyclerview
+// Geraadpleegd op 17 juni 2020
+
+// Android-code blogspot. Android RecyclerView add remove item example. Geraadpleegd via
+// https://android--code.blogspot.com/2015/12/android-recyclerview-add-remove-item.html
+// Geraadpleegd op 18 juni 2020
