@@ -95,7 +95,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         notification.medicineTaken = false;
 
         long id = this.mRepository.insertNotification(notification);
-        Log.i("NOTIFICATION_ITEM_INSERTED", "notification is inserted with ID: " + id);
+        Log.i("NOTIFICATION_ITEM", "notification is inserted with ID: " + id);
     }
 }
 
