@@ -1,5 +1,6 @@
 package com.example.medicinereminderapp;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,9 +29,9 @@ public class InsertMedicineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_medicine);
 
-        this.editTextNameMedicine = (EditText) findViewById(R.id.editTextNameMedicine);
-        this.editTextDateBegin = (EditText) findViewById(R.id.editTextDateBegin);
-        this.editTextDateEnd = (EditText) findViewById(R.id.editTextDateEnd);
+        this.editTextNameMedicine = findViewById(R.id.editTextNameMedicine);
+        this.editTextDateBegin = findViewById(R.id.editTextDateBegin);
+        this.editTextDateEnd = findViewById(R.id.editTextDateEnd);
     }
 
     // create an action bar button
@@ -90,6 +91,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
             return false;
         }
         else {
+            @SuppressLint("SimpleDateFormat")
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             Date dateBegin = null;
             Date dateEnd = null;

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -42,15 +43,23 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, final int position) {
         Notification mCurrent = this.myNotifications.get(position);
-        holder.notificationTimeOfDay.setText(mCurrent.hour);
+        holder.notificationTimeOfDay.setText(mCurrent.timeOfDay);
         holder.notificationDate.setText(mCurrent.date);
+        holder.switchStatus.setChecked(mCurrent.medicineTaken);
 
-        holder.notificationItem.setOnClickListener(new View.OnClickListener() {
+        holder.switchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Notification notification = myNotifications.get(position);
+                if (isChecked) {
+                    mRepository.updateNotificationStatusById(notification.notificationId, true);
+                    Log.i("SWITCH SET ON", notification.notificationId + "");
+                }
+                else {
+                    mRepository.updateNotificationStatusById(notification.notificationId, false);
+                    Log.i("SWITCH SET OFF", notification.notificationId + "");
+                }
 
-                Log.i("CLICKED NOTIFI", notification.notificationId + "");
             }
         });
     }

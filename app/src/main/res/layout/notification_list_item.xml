@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:useDefaultMargins="true"
     android:alignmentMode="alignBounds"
     android:columnOrderPreserved="false"
-    android:columnCount="5"
+    android:columnCount="4"
     android:id="@+id/notification_item"
     style="@style/list_item_style"
     android:background="@drawable/border_list_item"
@@ -20,19 +21,23 @@
         android:layout_width="119dp"
         android:layout_height="wrap_content"
         android:text="29/07/2020"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/notification_timeofday"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="14:00"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        tools:ignore="HardcodedText"/>
 
     <Switch
         android:id="@+id/switchTaken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_column="3"
         android:text="@string/takenMedicine" />
 
 </GridLayout>

@@ -2,10 +2,10 @@ package com.example.medicinereminderapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +21,7 @@ public class DisplayNotificationsFragment extends Fragment {
     private int mReminderId;
 
     private OnFragmentInteractionListener mListener;
+    private Button sendBackButton;
 
     private NotificationListAdapter mAdapter;
     private AppRepository mRepository;
@@ -43,9 +44,7 @@ public class DisplayNotificationsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mReminderId = getArguments().getInt(String.valueOf(REMINDER_ID));
-            Log.i("TEST OF NOTHING1", mReminderId + "");
         }
-        Log.i("TEST OF NOTHING2", "HAHAHA");
     }
 
     @Override
@@ -53,6 +52,14 @@ public class DisplayNotificationsFragment extends Fragment {
         this.remindersActivity = (RemindersActivity) getActivity();
         View view = inflater.inflate(R.layout.fragment_display_notifications, container, false);
         this.mRecyclerView = view.findViewById(R.id.recyclerview_notifications);
+        this.sendBackButton = view.findViewById(R.id.buttonBackFrameLayout);
+
+        this.sendBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(mReminderId);
+            }
+        });
 
         return view;
     }
@@ -75,7 +82,7 @@ public class DisplayNotificationsFragment extends Fragment {
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this.remindersActivity));
     }
 
-    public void onButtonPressed(int sendBackId) {
+    public void onBackPressed(int sendBackId) {
         if (mListener != null) {
             mListener.OnFragmentInteraction(sendBackId);
         }

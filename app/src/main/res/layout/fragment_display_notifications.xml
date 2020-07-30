@@ -7,11 +7,17 @@
     android:clickable="true"
     android:focusable="true">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonBackFrameLayout"
+        android:layout_width="405dp"
         android:layout_height="wrap_content"
-        android:text="Hello there testing...." />
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/button_layout"
+        android:text="@string/back_to_reminders"
+        android:textColor="@android:color/white"
+        android:layout_marginStart="3dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_notifications"
@@ -19,4 +25,3 @@
         android:layout_height="wrap_content" />
 
 </LinearLayout>
-

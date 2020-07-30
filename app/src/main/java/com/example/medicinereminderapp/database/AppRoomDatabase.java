@@ -13,7 +13,7 @@ import com.example.medicinereminderapp.entities.Medicine;
 import com.example.medicinereminderapp.entities.Notification;
 import com.example.medicinereminderapp.entities.Reminder;
 
-@Database(entities = {Medicine.class, Reminder.class, Notification.class}, version = 2)
+@Database(entities = {Medicine.class, Reminder.class, Notification.class}, version = 3)
 public abstract class AppRoomDatabase extends RoomDatabase {
     public abstract MedicineDao medicineDao();
     public abstract ReminderDao reminderDao();

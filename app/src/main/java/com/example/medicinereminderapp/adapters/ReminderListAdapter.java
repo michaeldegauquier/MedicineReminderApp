@@ -2,7 +2,6 @@ package com.example.medicinereminderapp.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,22 +47,11 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
         String amount = mCurrent.amount + "";
         holder.reminderAmountMedicines.setText(amount);
 
-        holder.reminderItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Reminder reminder = myReminders.get(position);
-
-                Log.i("CLICKED ITEM", reminder.timeOfDay);
-            }
-        });
-
         holder.notificationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Reminder reminder = myReminders.get(position);
                 ((RemindersActivity)context).openFrameDisplayNotifications(reminder.reminderId);
-
-                Log.i("CLICKED NOTIF REMINDER", reminder.timeOfDay);
             }
         });
 
@@ -74,6 +62,7 @@ public class ReminderListAdapter extends RecyclerView.Adapter<ReminderListAdapte
                 RemindersActivity.cancelNotification(context, reminder.reminderId);
                 RemindersActivity.cancelNotification(context, -reminder.reminderId);
 
+                mRepository.deleteNotificationsByReminderId(reminder.reminderId);
                 mRepository.deleteReminder(reminder, (Activity) context);
                 notifyItemRemoved(position);
                 ((RemindersActivity)context).updateRemindersView();

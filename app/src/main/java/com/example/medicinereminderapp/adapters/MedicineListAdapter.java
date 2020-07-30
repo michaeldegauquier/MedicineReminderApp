@@ -1,9 +1,9 @@
 package com.example.medicinereminderapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +29,7 @@ import java.util.List;
 public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapter.MedicineViewHolder> {
     private Context context;
     private LayoutInflater mInflater;
-    private AppRepository repository;
+    private AppRepository mRepository;
     private final List<MedicineWithRemindersList> myMedicines;
     public static final String MEDICINE_ID = "MEDICINE_ID";
 
@@ -37,7 +37,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         this.mInflater = LayoutInflater.from(context);
         this.myMedicines = myMedicines;
         this.context = context;
-        this.repository = repository;
+        this.mRepository = repository;
     }
 
     @NonNull
@@ -52,7 +52,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     public void onBindViewHolder(@NonNull MedicineViewHolder holder, final int position) {
         try {
             MedicineWithRemindersList mCurrent = this.myMedicines.get(position);
-            int totalAmount = getTotalAmountMedicines(mCurrent.medicines.medicineId, repository);
+            int totalAmount = getAmountMedicinesToTake(mCurrent.medicines.medicineId);
             String medName = mCurrent.medicines.name + " - " + totalAmount;
             holder.medicineName.setText(medName);
 
@@ -61,15 +61,6 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
-        holder.medicineItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MedicineWithRemindersList medicine = myMedicines.get(position);
-
-                Log.i("CLICKED ITEM", medicine.medicines.name);
-            }
-        });
 
         holder.accessAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,12 +79,14 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
                 MedicineWithRemindersList medicine = myMedicines.get(position);
 
                 for (int i = 0; i < medicine.reminders.size(); i++) {
-                    Reminder r = medicine.reminders.get(i);
-                    RemindersActivity.cancelNotification(context, r.reminderId);
-                    RemindersActivity.cancelNotification(context, -r.reminderId);
+                    Reminder reminder = medicine.reminders.get(i);
+                    RemindersActivity.cancelNotification(context, reminder.reminderId);
+                    RemindersActivity.cancelNotification(context, -reminder.reminderId);
+                    mRepository.deleteNotificationsByReminderId(reminder.reminderId);
+                    mRepository.deleteReminder2(reminder);
                 }
 
-                repository.deleteMedicineById(medicine.medicines.medicineId, (Activity) context);
+                mRepository.deleteMedicineById(medicine.medicines.medicineId, (Activity) context);
                 notifyItemRemoved(position);
                 ((MainActivity)context).updateMedicineList();
             }
@@ -108,54 +101,53 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         return 0;
     }
 
-    private int getTotalAmountMedicines(int medicineId, AppRepository repository) {
-        MedicineWithRemindersList med = repository.getMedicineById(medicineId);
-        if (med.reminders.size() <= 0) {
+    private int getAmountMedicinesToTake(int medicineId) {
+        MedicineWithRemindersList medicine = this.mRepository.getMedicineById(medicineId);
+        int totalAmount = this.getTotalAmountMedicines(medicine);
+        int amountReminders = 0;
+
+        for (int i = 0; i < medicine.reminders.size(); i++) {
+            int amountNotifications = this.mRepository.getAmountNotificationsByReminderIdAndStatus(medicine.reminders.get(i).reminderId, true);
+            amountReminders += medicine.reminders.get(i).amount * amountNotifications;
+        }
+
+        return totalAmount - amountReminders;
+    }
+
+    private int getTotalAmountMedicines(MedicineWithRemindersList medicine) {
+        if (medicine.reminders.size() <= 0) {
             return 0;
         }
         else {
             int days = 0;
             try {
-                days = getDaysBetweenDates(med.medicines.dateBegin, med.medicines.dateEnd);
+                days = getDaysBetweenDates(medicine.medicines.dateBegin, medicine.medicines.dateEnd);
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
 
             int amountMed = 0;
-            for (int i = 0; i < med.reminders.size(); i++) {
-                amountMed += days * med.reminders.get(i).amount;
+            for (int i = 0; i < medicine.reminders.size(); i++) {
+                amountMed += days * medicine.reminders.get(i).amount;
             }
             return amountMed;
         }
     }
 
     private int getDaysBetweenDates(String dBegin, String dEnd) {
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String today = formatter.format(new Date());
-
         Date dateBegin = null;
         Date dateEnd = null;
-        Date dateToday = null;
 
         try {
             dateBegin = formatter.parse(dBegin);
             dateEnd = formatter.parse(dEnd);
-            dateToday = formatter.parse(today);
         } catch (NullPointerException | ParseException e) {
             e.printStackTrace();
         }
 
-        long diff = 0;
-        if (dateToday.after(dateEnd)) {
-            return 0;
-        }
-        else if (dateToday.after(dateBegin)) {
-            diff = Math.abs(dateToday.getTime() - dateEnd.getTime());
-        }
-        else {
-            diff = Math.abs(dateBegin.getTime() - dateEnd.getTime());
-        }
-
+        long diff = Math.abs(dateBegin.getTime() - dateEnd.getTime());
         long diffDates = diff / (24 * 60 * 60 * 1000) + 1;
         return (int) diffDates;
     }

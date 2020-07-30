@@ -1,7 +1,6 @@
 package com.example.medicinereminderapp;
 
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -20,7 +19,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.medicinereminderapp.adapters.MedicineListAdapter;
 import com.example.medicinereminderapp.database.AppRepository;
 import com.example.medicinereminderapp.entities.MedicineWithRemindersList;
-import com.example.medicinereminderapp.entities.Notification;
 import com.example.medicinereminderapp.entities.Reminder;
 import com.example.medicinereminderapp.fragments.DisplayNotificationsFragment;
 import com.example.medicinereminderapp.fragments.DisplayRemindersFragment;
@@ -28,7 +26,6 @@ import com.example.medicinereminderapp.fragments.InsertReminderFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class RemindersActivity extends AppCompatActivity implements InsertReminderFragment.InsertReminderButtonFragmentListener, DisplayNotificationsFragment.OnFragmentInteractionListener {
@@ -46,12 +43,11 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
         this.mRepository = new AppRepository(getApplication());
-        this.editTextTime = (EditText) findViewById(R.id.editTextTimeReminder);
-        this.frameContainer = (FrameLayout) findViewById(R.id.fragment_display_notifications);
+        this.editTextTime = findViewById(R.id.editTextTimeReminder);
+        this.frameContainer = findViewById(R.id.fragment_display_notifications);
 
         Intent intent = getIntent();
         this.medicineId = intent.getIntExtra(MedicineListAdapter.MEDICINE_ID, -1);
-        Log.i("ID MEDICINE", this.medicineId + "");
 
         this.medicine = this.mRepository.getMedicineById(this.medicineId);
         setTitle(medicine.medicines.name);
@@ -70,17 +66,16 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
             Reminder reminder = new Reminder();
             reminder.medicineId = medicineId;
             reminder.timeOfDay = bundle.getString("time");
-            reminder.amount = Integer.parseInt(bundle.getString("amount"));
+            String amount = bundle.getString("amount");
+            reminder.amount = Integer.parseInt(amount);
 
-            int hours = Integer.parseInt(bundle.getString("time").substring(0, 2));
-            int minutes = Integer.parseInt(bundle.getString("time").substring(3, 5));
             String dateBegin = medicine.medicines.dateBegin;
             String dateEnd = medicine.medicines.dateEnd;
 
             long reminderId = this.mRepository.insertReminder(reminder, this);
             Log.i("REMINDER_CREATED", "ID: " + reminderId);
 
-            startAlarmBroadcastReceiver(this, hours, minutes, (int) reminderId, reminder.amount, dateBegin, dateEnd);
+            startAlarmBroadcastReceiver(this, reminder.timeOfDay, (int) reminderId, reminder.amount, dateBegin, dateEnd);
         }
         //Update the reminders
         this.displayRemindersFragment.updateRemindersList();
@@ -120,12 +115,12 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         this.editTextTime.setText(sdf.format(myCalendar.getTime()));
     }
 
-    public void startAlarmBroadcastReceiver(Context context, int hours, int minutes, int reminderId, int amount, String dateBegin, String dateEnd) {
+    public void startAlarmBroadcastReceiver(Context context, String timeOfDay, int reminderId, int amount, String dateBegin, String dateEnd) {
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         Bundle bundle = new Bundle();
         bundle.putString("medicineName", medicine.medicines.name);
         bundle.putInt("notificationId", reminderId);
-        bundle.putString("timeOfDay", hours + ":" + minutes);
+        bundle.putString("timeOfDay", timeOfDay);
         bundle.putString("amount", getString(R.string.take_amount_medicines_1) + " " + amount + " " + getString(R.string.take_amount_medicines_2));
         bundle.putBoolean("cancelAll", false);
         myIntent.putExtras(bundle);
@@ -137,19 +132,19 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         calendar.set(Calendar.YEAR, getYearFromDate(dateBegin));
         calendar.set(Calendar.MONTH, getMonthFromDate(dateBegin));
         calendar.set(Calendar.DAY_OF_MONTH, getDayOfMonthFromDate(dateBegin));
-        calendar.set(Calendar.HOUR_OF_DAY, hours);
-        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeOfDay.substring(0,2)));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(timeOfDay.substring(3,5)));
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, pendingIntent);  //set repeating every 24 hours
-        startAlarmBroadcastReceiverDateEnd(context, hours, minutes, reminderId, amount, dateEnd);
+        startAlarmBroadcastReceiverDateEnd(context, timeOfDay, reminderId, amount, dateEnd);
     }
 
-    public void startAlarmBroadcastReceiverDateEnd(Context context, int hours, int minutes, int reminderId, int amount, String dateEnd) {
+    public void startAlarmBroadcastReceiverDateEnd(Context context, String timeOfDay, int reminderId, int amount, String dateEnd) {
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         Bundle bundle = new Bundle();
         bundle.putString("medicineName", medicine.medicines.name);
         bundle.putInt("notificationId", -reminderId);
-        bundle.putString("timeOfDay", hours + ":" + minutes);
+        bundle.putString("timeOfDay", timeOfDay);
         bundle.putString("amount", getString(R.string.take_amount_medicines_1) + " " + amount + " " + getString(R.string.take_amount_medicines_2));
         bundle.putBoolean("cancelAll", true);
         myIntent.putExtras(bundle);
@@ -162,8 +157,8 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         calendar.set(Calendar.YEAR, getYearFromDate(dateEnd));
         calendar.set(Calendar.MONTH, getMonthFromDate(dateEnd));
         calendar.set(Calendar.DAY_OF_MONTH, getDayOfMonthFromDate(dateEnd));
-        calendar.set(Calendar.HOUR_OF_DAY, hours);
-        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeOfDay.substring(0,2)));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(timeOfDay.substring(3,5)));
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, pendingIntent);  //set repeating every 24 hour
     }
@@ -173,24 +168,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminderId, myIntent, 0);
         alarmManager.cancel(pendingIntent);
-        Log.i("CANCELED", "Notification is canceled with id: " + reminderId);
-    }
-
-    public static void insertNotificationItem(Context context, int reminderId, String timeOfDay) {
-        AppRepository mRepository = new AppRepository((Application) context.getApplicationContext());
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String dateToday = formatter.format(date);
-
-        Notification notification = new Notification();
-        notification.reminderId = reminderId;
-        notification.date = dateToday;
-        notification.hour = timeOfDay;
-        notification.medicineTaken = false;
-
-        long id = mRepository.insertNotification(notification);
-        //int id = reminderId;
-        Log.i("NOTIF INSERTED", "notif is inserted with ID: " + id);
+        Log.i("CANCELED_NOTIFICATION", "Notification canceled with id: " + reminderId);
     }
 
     public int getYearFromDate(String date) {
@@ -210,7 +188,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
 
     @Override
     public void OnFragmentInteraction(int reminderId) {
-        Log.i("BACK", reminderId + "");
+        onBackPressed();
     }
 }
 

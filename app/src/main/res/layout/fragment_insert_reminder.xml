@@ -6,7 +6,9 @@
     android:useDefaultMargins="true"
     android:alignmentMode="alignBounds"
     android:columnOrderPreserved="false"
-    android:columnCount="4">
+    android:columnCount="4"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <TextView
         android:id="@+id/textViewTime"
@@ -24,7 +26,8 @@
         android:onClick="onClickTime"
         android:hint="@string/time_of_day"
         android:inputType="time"
-        android:focusable="false" />
+        android:focusable="false"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/textViewAmountMedicines"
@@ -42,7 +45,8 @@
         android:layout_column="0"
         android:ems="10"
         android:hint="@string/amount"
-        android:inputType="number" />
+        android:inputType="number"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/buttonAddReminder"

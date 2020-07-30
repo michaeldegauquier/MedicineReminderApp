@@ -50,7 +50,7 @@ public class EntityTests {
     }
 
     @Test
-    public void makeMeddicineWithReminderSize() {
+    public void makeMedicineWithReminderSize() {
         MedicineWithRemindersList medicine = new MedicineWithRemindersList();
 
         Reminder reminder = new Reminder();
@@ -65,7 +65,7 @@ public class EntityTests {
     }
 
     @Test
-    public void makeMeddicineWithReminderNotNull() {
+    public void makeMedicineWithReminderNotNull() {
         MedicineWithRemindersList medicine = new MedicineWithRemindersList();
 
         Reminder reminder = new Reminder();

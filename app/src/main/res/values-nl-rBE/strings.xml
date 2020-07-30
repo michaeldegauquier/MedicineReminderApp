@@ -17,4 +17,5 @@
     <string name="take_amount_medicines_2">medicijnen innemen.</string>
     <string name="no_internet">Geen data gevonden! Controleer uw internetverbinding.</string>
     <string name="takenMedicine">Ingenomen</string>
+    <string name="back_to_reminders">Terug naar Herinneringen</string>
 </resources>

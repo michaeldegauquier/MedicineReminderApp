@@ -12,7 +12,7 @@ public class Notification {
 
     public int reminderId;
 
-    public String hour;
+    public String timeOfDay;
 
     public String date;
 

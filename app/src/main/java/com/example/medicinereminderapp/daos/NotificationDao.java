@@ -4,7 +4,6 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.medicinereminderapp.entities.Notification;
 
@@ -15,11 +14,14 @@ public interface NotificationDao {
     @Query("SELECT * FROM notifications WHERE reminderId LIKE :id")
     List<Notification> getNotificationsByReminderId(int id);
 
+    @Query("SELECT COUNT(*) FROM notifications WHERE reminderId LIKE :id AND medicineTaken = :status")
+    int getAmountNotificationsByReminderIdAndStatus(int id, boolean status);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertNotification(Notification notification);
 
-    /*@Update
-    void updateNotification(Notification notification);*/
+    @Query("UPDATE notifications SET medicineTaken = :status WHERE notificationId LIKE :id")
+    void updateNotificationStatusById(int id, boolean status);
 
     @Query("DELETE FROM notifications WHERE reminderId LIKE :id")
     void deleteNotificationsByReminderId(int id);

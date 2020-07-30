@@ -1,5 +1,6 @@
 package com.example.medicinereminderapp.database;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.os.AsyncTask;
@@ -83,7 +84,11 @@ public class AppRepository {
     }
 
     public void deleteReminder(Reminder reminder, Activity activity) {
-        new deleteReminderByIdAsync(this.mReminderDao, activity).execute(reminder);
+        new deleteReminderAsync(this.mReminderDao, activity).execute(reminder);
+    }
+
+    public void deleteReminder2(Reminder reminder) {
+        new deleteReminder2Async(this.mReminderDao).execute(reminder);
     }
 
     //Notifications
@@ -101,6 +106,20 @@ public class AppRepository {
         return notifList;
     }
 
+    public int getAmountNotificationsByReminderIdAndStatus(int reminderId, boolean status) {
+        int amount = 0;
+
+        try {
+            amount = new getAmountNotificationsByReminderIdAndStatusAsync(this.mNotificationDao, status).execute(reminderId).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return amount;
+    }
+
     public long insertNotification(Notification notification) {
         long notificationId = 0;
 
@@ -115,8 +134,8 @@ public class AppRepository {
         return notificationId;
     }
 
-    public void updateNotification(Notification notification, Activity activity) {
-
+    public void updateNotificationStatusById(int id, boolean status) {
+        new updateNotificationStatusByIdAsync(this.mNotificationDao, status).execute(id);
     }
 
     public void deleteNotificationsByReminderId(int reminderId) {
@@ -139,6 +158,9 @@ public class AppRepository {
 
         return result;
     }
+
+
+    //Async Methods
 
     //get all Medicines (with Reminders)
     private static class getAllMedicinesAsync extends AsyncTask<Void, Void, List<MedicineWithRemindersList>> {
@@ -171,6 +193,7 @@ public class AppRepository {
     //insert Medicine
     private static class insertMedicineAsync extends AsyncTask<Medicine, Void, Void> {
         private MedicineDao medicineDao;
+        @SuppressLint("StaticFieldLeak")
         private Activity activity;
 
         insertMedicineAsync(MedicineDao medicineDao, Activity activity) {
@@ -193,6 +216,7 @@ public class AppRepository {
     //delete Medicine by ID
     private static class deleteMedicineByIdAsync extends AsyncTask<Integer, Void, Void> {
         private MedicineDao medicineDao;
+        @SuppressLint("StaticFieldLeak")
         private Activity activity;
 
         deleteMedicineByIdAsync(MedicineDao medicineDao, Activity activity) {
@@ -215,6 +239,7 @@ public class AppRepository {
     //insert Reminder
     private static class insertReminderAsync extends AsyncTask<Reminder, Void, Long> {
         private ReminderDao reminderDao;
+        @SuppressLint("StaticFieldLeak")
         private Activity activity;
 
         insertReminderAsync(ReminderDao reminderDao, Activity activity) {
@@ -233,12 +258,13 @@ public class AppRepository {
         }
     }
 
-    //delete Reminder by ID
-    private static class deleteReminderByIdAsync extends AsyncTask<Reminder, Void, Void> {
+    //delete Reminder
+    private static class deleteReminderAsync extends AsyncTask<Reminder, Void, Void> {
         private ReminderDao reminderDao;
+        @SuppressLint("StaticFieldLeak")
         private Activity activity;
 
-        deleteReminderByIdAsync(ReminderDao reminderDao, Activity activity) {
+        deleteReminderAsync(ReminderDao reminderDao, Activity activity) {
             this.reminderDao = reminderDao;
             this.activity = activity;
         }
@@ -252,6 +278,21 @@ public class AppRepository {
         @Override
         protected void onPostExecute(Void aVoid) {
             ((RemindersActivity)activity).updateRemindersView();
+        }
+    }
+
+    //delete Reminder
+    private static class deleteReminder2Async extends AsyncTask<Reminder, Void, Void> {
+        private ReminderDao reminderDao;
+
+        deleteReminder2Async(ReminderDao reminderDao) {
+            this.reminderDao = reminderDao;
+        }
+
+        @Override
+        protected Void doInBackground(Reminder... reminders) {
+            this.reminderDao.deleteReminder(reminders[0]);
+            return null;
         }
     }
 
@@ -269,6 +310,21 @@ public class AppRepository {
         }
     }
 
+    private static class getAmountNotificationsByReminderIdAndStatusAsync extends AsyncTask<Integer, Void, Integer> {
+        private NotificationDao notificationDao;
+        private boolean status;
+
+        getAmountNotificationsByReminderIdAndStatusAsync(NotificationDao notificationDao, boolean status) {
+            this.notificationDao = notificationDao;
+            this.status = status;
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            return this.notificationDao.getAmountNotificationsByReminderIdAndStatus(integers[0], this.status);
+        }
+    }
+
     //insert Notification
     private static class insertNotificationAsync extends AsyncTask<Notification, Void, Long> {
         private NotificationDao notificationDao;
@@ -283,8 +339,22 @@ public class AppRepository {
         }
     }
 
-    //update Notification
+    //update NotificationStatus by Id
+    private static class updateNotificationStatusByIdAsync extends AsyncTask<Integer, Void, Void> {
+        private NotificationDao notificationDao;
+        private boolean status;
 
+        updateNotificationStatusByIdAsync(NotificationDao notificationDao, boolean status) {
+            this.notificationDao = notificationDao;
+            this.status = status;
+        }
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            this.notificationDao.updateNotificationStatusById(integers[0], status);
+            return null;
+        }
+    }
 
     //delete all notifications by reminderId
     private static class deleteNotificationsByReminderIdAsync extends AsyncTask<Integer, Void, Void> {

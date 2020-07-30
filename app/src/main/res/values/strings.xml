@@ -16,4 +16,5 @@
     <string name="take_amount_medicines_2">medicines.</string>
     <string name="no_internet">No data found! Check your Internet Connection.</string>
     <string name="takenMedicine">Taken</string>
+    <string name="back_to_reminders">Back to Reminders</string>
 </resources>

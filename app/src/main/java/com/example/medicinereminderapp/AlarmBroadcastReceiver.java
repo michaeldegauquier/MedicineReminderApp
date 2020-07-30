@@ -1,5 +1,6 @@
 package com.example.medicinereminderapp;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -16,9 +17,15 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.medicinereminderapp.database.AppRepository;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
+    private AppRepository mRepository;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        this.mRepository = new AppRepository((Application) context.getApplicationContext());
         showNotification(context, intent);
     }
 
@@ -30,7 +37,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Intent notificationIntent = new Intent(context, MainActivity.class);
         Bundle bundle = new Bundle();
         notificationIntent.putExtras(bundle);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        notificationIntent.setFlags(Intent.FLAG_RECEIVER_FOREGROUND | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
         Bundle returnBundle = intent.getExtras();
         String title = returnBundle.getString("medicineName");
@@ -51,7 +58,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                     .setChannelId(CHANNEL_ID)
                     .setContentTitle(title);
         } else {
-            mBuilder = new NotificationCompat.Builder(context)
+            mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setPriority(Notification.PRIORITY_HIGH)
                     .setContentTitle(title);
@@ -70,9 +77,25 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
         // if cancelAll is false
         if (!cancelAll) {
-            RemindersActivity.insertNotificationItem(context, reminderId, timeOfDay);
             mNotificationManager.notify(reminderId, mBuilder.build());
+            this.insertNotificationItem(reminderId, timeOfDay);
         }
+    }
+
+    public void insertNotificationItem(int reminderId, String timeOfDay) {
+        Date date = new Date();
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String dateToday = formatter.format(date);
+
+        com.example.medicinereminderapp.entities.Notification notification = new com.example.medicinereminderapp.entities.Notification();
+        notification.reminderId = reminderId;
+        notification.date = dateToday;
+        notification.timeOfDay = timeOfDay;
+        notification.medicineTaken = false;
+
+        long id = this.mRepository.insertNotification(notification);
+        Log.i("NOTIFICATION_INSERTED", "notification is inserted with ID: " + id);
     }
 }
 

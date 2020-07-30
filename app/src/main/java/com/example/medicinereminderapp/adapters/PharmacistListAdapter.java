@@ -21,14 +21,14 @@ import java.util.List;
 public class PharmacistListAdapter extends RecyclerView.Adapter<PharmacistListAdapter.PharmaViewHolder> {
     private Context context;
     private LayoutInflater mInflater;
-    private AppRepository repository;
+    private AppRepository mRepository;
     private final List<Pharmacist> myPharmacists;
 
     public PharmacistListAdapter(Context context, List<Pharmacist> myPharmacists, AppRepository repository) {
         this.mInflater = LayoutInflater.from(context);
         this.myPharmacists = myPharmacists;
         this.context = context;
-        this.repository = repository;
+        this.mRepository = repository;
     }
 
     @NonNull
