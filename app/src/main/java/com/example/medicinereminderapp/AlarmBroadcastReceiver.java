@@ -75,7 +75,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             Log.i("CANCELED", reminderId + " + " + -reminderId);
         }
 
-        // if cancelAll is false
+        // if cancelAll is false -> notify the user
         if (!cancelAll) {
             mNotificationManager.notify(reminderId, mBuilder.build());
             this.insertNotificationItem(reminderId, timeOfDay);
@@ -95,7 +95,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         notification.medicineTaken = false;
 
         long id = this.mRepository.insertNotification(notification);
-        Log.i("NOTIFICATION_INSERTED", "notification is inserted with ID: " + id);
+        Log.i("NOTIFICATION_ITEM_INSERTED", "notification is inserted with ID: " + id);
     }
 }
 

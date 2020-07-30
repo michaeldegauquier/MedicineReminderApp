@@ -113,6 +113,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
         return true;
     }
 
+    //After clicked "OK", it will update "myCalendar" with the chosen date
     DatePickerDialog.OnDateSetListener dateBegin = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -133,6 +134,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
         }
     };
 
+    //it opens a DatePicker
     public void onClickDateBegin(View v) {
         new DatePickerDialog(InsertMedicineActivity.this, dateBegin, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
@@ -145,6 +147,7 @@ public class InsertMedicineActivity extends AppCompatActivity {
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    //Updates the EditText field with the right date in the right format
     private void updateDateBegin() {
         String myFormat = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);

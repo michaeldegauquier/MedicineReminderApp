@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TimePicker;
@@ -31,7 +32,7 @@ import java.util.Locale;
 public class RemindersActivity extends AppCompatActivity implements InsertReminderFragment.InsertReminderButtonFragmentListener, DisplayNotificationsFragment.OnFragmentInteractionListener {
     final Calendar myCalendar = Calendar.getInstance();
 
-    public EditText editTextTime;
+    public EditText editTextTime, editTextAmount;
     private AppRepository mRepository;
     private DisplayRemindersFragment displayRemindersFragment;
     private FrameLayout frameContainer;
@@ -44,6 +45,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         setContentView(R.layout.activity_reminders);
         this.mRepository = new AppRepository(getApplication());
         this.editTextTime = findViewById(R.id.editTextTimeReminder);
+        this.editTextAmount = findViewById(R.id.editTextAmountMedicines);
         this.frameContainer = findViewById(R.id.fragment_display_notifications);
 
         Intent intent = getIntent();
@@ -77,10 +79,26 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
 
             startAlarmBroadcastReceiver(this, reminder.timeOfDay, (int) reminderId, reminder.amount, dateBegin, dateEnd);
         }
-        //Update the reminders
+        //Update the reminders view
         this.displayRemindersFragment.updateRemindersList();
+        //Clear the input fields (EditText)
+        this.editTextTime.setText("");
+        this.editTextAmount.setText("");
+        //Close the Keyboard of the phone
+        this.closeKeyboard();
     }
 
+    //Close the keyboard of your phone
+    private void closeKeyboard()
+    {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    //Update the view of the displayed reminders
     public void updateRemindersView() {
         displayRemindersFragment.updateRemindersList();
     }
@@ -94,6 +112,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         fragmentTransaction.add(R.id.fragment_display_notifications, fragment, "FRAGMENT_NOTIFICATIONS").commit();
     }
 
+    //After clicked "OK", it will update "myCalendar" with the chosen time
     TimePickerDialog.OnTimeSetListener timeOfDay = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -103,11 +122,13 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         }
     };
 
+    //it opens a TimePicker
     public void onClickTime(View v) {
         new TimePickerDialog(RemindersActivity.this, timeOfDay,
                 myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), true).show();
     }
 
+    //Updates the EditText field with the right time in the right format
     private void updateTime() {
         String myFormat = "HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
@@ -115,6 +136,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         this.editTextTime.setText(sdf.format(myCalendar.getTime()));
     }
 
+    //It starts the broadcastreceiver for dateBegin -> and repeat every day the notification
     public void startAlarmBroadcastReceiver(Context context, String timeOfDay, int reminderId, int amount, String dateBegin, String dateEnd) {
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         Bundle bundle = new Bundle();
@@ -139,6 +161,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         startAlarmBroadcastReceiverDateEnd(context, timeOfDay, reminderId, amount, dateEnd);
     }
 
+    //It starts the broadcastreceiver for dateEnd -> Both notifiers (dateBegin and dateEnd) will be canceled on DateEnd
     public void startAlarmBroadcastReceiverDateEnd(Context context, String timeOfDay, int reminderId, int amount, String dateEnd) {
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
         Bundle bundle = new Bundle();
@@ -163,6 +186,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, pendingIntent);  //set repeating every 24 hour
     }
 
+    //It cancels the notification on ID
     public static void cancelNotification(Context context, int reminderId) {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmBroadcastReceiver.class);
@@ -215,3 +239,7 @@ public class RemindersActivity extends AppCompatActivity implements InsertRemind
 // Coding in Flow. Open a Fragment with an Animation + Communicate with Activity - Android Studio Tutorial. Geraadpleegd via
 // https://codinginflow.com/tutorials/android/fragment-animation-interface
 // Geraadpleegd op 28 juli 2020
+
+// GeeksforGeeks. How to programmatically hide Android soft keyboard. Geraadpleegd via
+// https://www.geeksforgeeks.org/how-to-programmatically-hide-android-soft-keyboard/
+// Geraadpleegd op 30 juli 2020

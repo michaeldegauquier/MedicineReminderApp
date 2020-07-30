@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         this.updateMedicineList();
     }
 
+    //Update the view
     public void updateMedicineList() {
         // Get a handle to the RecyclerView.
         this.mRecyclerView = findViewById(R.id.recyclerview);
@@ -47,19 +48,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // This method is called when the second activity (InsertMedicineActivity) finishes
+    //This method is called when the second activity (InsertMedicineActivity) finishes
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // check that it is the InsertMedicineActivity with an OK result
+        //check that it is the InsertMedicineActivity with an OK result
         if (requestCode == INSERT_MEDICINE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                // get String data from Intent
+                //get String data from Intent
                 Bundle returnBundle = data.getExtras();
 
-                // set text view with string
+                //set text view with string
                 Medicine med = new Medicine();
 
                 if (returnBundle != null) {

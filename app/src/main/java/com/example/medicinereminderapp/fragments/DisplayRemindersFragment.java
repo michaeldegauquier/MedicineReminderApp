@@ -38,6 +38,7 @@ public class DisplayRemindersFragment extends Fragment {
         this.updateRemindersList();
     }
 
+    //Update view
     public void updateRemindersList() {
         this.mRepository = new AppRepository(this.remindersActivity.getApplication());
         // Create an adapter and supply the data to be displayed.

@@ -67,6 +67,7 @@ public class PharmaciesActivity extends AppCompatActivity {
         return pharmacists;
     }
 
+    //It checks the internet connection
     public boolean checkInternetConnection() {
         boolean connected = false;
 
@@ -77,6 +78,7 @@ public class PharmaciesActivity extends AppCompatActivity {
         return connected;
     }
 
+    //Update the view
     public void updatePharmacistList() {
         // Get a handle to the RecyclerView.
         this.mRecyclerView = findViewById(R.id.recyclerview_pharmacies);

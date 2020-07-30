@@ -101,6 +101,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         return 0;
     }
 
+    //It returns how many medicines you still have to take
     private int getAmountMedicinesToTake(int medicineId) {
         MedicineWithRemindersList medicine = this.mRepository.getMedicineById(medicineId);
         int totalAmount = this.getTotalAmountMedicines(medicine);
@@ -114,6 +115,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         return totalAmount - amountReminders;
     }
 
+    //It returns the total amount of medicines you have to take
     private int getTotalAmountMedicines(MedicineWithRemindersList medicine) {
         if (medicine.reminders.size() <= 0) {
             return 0;
@@ -134,6 +136,7 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         }
     }
 
+    //It returns the amount of days between two dates
     private int getDaysBetweenDates(String dBegin, String dEnd) {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");

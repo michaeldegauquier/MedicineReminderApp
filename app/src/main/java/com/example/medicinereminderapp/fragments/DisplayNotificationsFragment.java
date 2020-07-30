@@ -21,7 +21,7 @@ public class DisplayNotificationsFragment extends Fragment {
     private int mReminderId;
 
     private OnFragmentInteractionListener mListener;
-    private Button sendBackButton;
+    private Button sendBackButton; //Button to go back to the reminders view
 
     private NotificationListAdapter mAdapter;
     private AppRepository mRepository;
@@ -71,6 +71,7 @@ public class DisplayNotificationsFragment extends Fragment {
         this.updateNotificationsList();
     }
 
+    //Update view
     public void updateNotificationsList() {
         this.mRepository = new AppRepository(this.remindersActivity.getApplication());
         // Create an adapter and supply the data to be displayed.
@@ -82,6 +83,7 @@ public class DisplayNotificationsFragment extends Fragment {
         this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this.remindersActivity));
     }
 
+    //To go back to the reminders view (overview of the reminders and to create a reminder)
     public void onBackPressed(int sendBackId) {
         if (mListener != null) {
             mListener.OnFragmentInteraction(sendBackId);
