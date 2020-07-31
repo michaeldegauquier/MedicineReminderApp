@@ -10,8 +10,9 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-115dp"
-        tools:layout_editor_absoluteY="-36dp" />
+        android:layout_marginBottom="145dp"
+        app:layout_constraintBottom_toTopOf="@+id/floatb2"
+        tools:layout_editor_absoluteX="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatb1"
